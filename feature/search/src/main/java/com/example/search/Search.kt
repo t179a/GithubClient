@@ -30,7 +30,11 @@ import androidx.compose.ui.unit.sp
 //TODO hiltでviewModelを注入して、flowをcollect
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(onSearch: () -> Unit, modifier: Modifier = Modifier) {
+fun SearchScreen(
+    modifier: Modifier = Modifier,
+    onSearch: () -> Unit,
+    viewModel: SearchViewModel = hiltViewModel()
+) {
     Scaffold(
         modifier = modifier,
         topBar = { SearchTextFieldAppBar(onSearch = onSearch) },

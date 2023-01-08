@@ -1,8 +1,10 @@
 package com.example.githubclient.ui
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
+import com.example.githubclient.navigation.GithubClientNavHost
 
 @Composable
 fun GithubClientApp() {
-   //TODO NavHostを追加、順次featureを追加していく
+   GithubClientNavHost(navController = rememberNavController() )
 }
