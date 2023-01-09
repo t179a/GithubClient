@@ -15,11 +15,14 @@ class SearchNetworkService(val httpClient: HttpClient) {
     ): T = try {
         httpClient.get(url) {
             headers {
-                append("q", query)
-                append("sort", sort)
-                append("order", order)
-                append("per_page", perPage.toString())
-                append("page", page.toString())
+                append("accept", "application/vnd.github+json")
+            }
+            url {
+                parameters.append("q", query)
+                parameters.append("sort", sort)
+                parameters.append("order", order)
+                parameters.append("per_page", perPage.toString())
+                parameters.append("page", page.toString())
             }
         }.body()
     } catch (e: Throwable) {
