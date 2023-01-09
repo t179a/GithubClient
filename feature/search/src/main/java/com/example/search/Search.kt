@@ -4,58 +4,71 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.search.Owner
+import com.example.data.search.RepositoryItem
 
-
-//TODO hiltでviewModelを注入して、flowをcollect
+//TODO importで「*」を使っている点を修正
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    onSearch: () -> Unit,
-    viewModel: SearchViewModel = hiltViewModel()
+    onSearch: (String) -> Unit,
+    onWordChange: (String) -> Unit,
+    uiState: SearchUiState
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { SearchTextFieldAppBar(onSearch = onSearch) },
+        topBar = {
+            SearchTextFieldAppBar(
+                onSearch = onSearch,
+                onWordChange = onWordChange,
+                searchWord = uiState.searchWord,
+            )
+        },
     ) { innerPadding ->
-        SearchedResultListField(modifier = Modifier.padding(innerPadding))
+        if (uiState.isLoading) {
+            LoadingBody(modifier = Modifier.padding(innerPadding))
+        } else {
+            SearchedResultListField(
+                modifier = Modifier.padding(innerPadding),
+                repositoryList = uiState.repositoryList,
+            )
+        }
+
     }
 }
 
-//TODO searchWordをviewModelで保持するかどうか
 @Composable
 private fun SearchTextFieldAppBar(
-    onSearch: () -> Unit,
+    onSearch: (String) -> Unit,
+    onWordChange: (String) -> Unit,
+    searchWord: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant
 ) {
-    val searchWord = rememberSaveable { mutableStateOf("") }
-
     SearchTextField(
         onSearch = onSearch,
-        word = searchWord.value,
-        onWordChange = { searchWord.value = it })
+        word = searchWord,
+        onWordChange = onWordChange,
+        modifier = modifier
+    )
 
 }
 
@@ -63,7 +76,7 @@ private fun SearchTextFieldAppBar(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
-    onSearch: () -> Unit,
+    onSearch: (String) -> Unit,
     word: String,
     onWordChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -95,7 +108,7 @@ private fun SearchTextField(
             }
         },
         keyboardActions = KeyboardActions(onDone = {
-            onSearch()
+            onSearch(word)
             keyboardController?.hide()
         }),
         singleLine = true,
@@ -105,28 +118,30 @@ private fun SearchTextField(
 
 
 @Composable
-private fun SearchedResultListField(modifier: Modifier = Modifier) {
-    //TODO viewModelのListを表示するように変更
+private fun SearchedResultListField(
+    modifier: Modifier = Modifier,
+    repositoryList: List<RepositoryItem>
+) {
     LazyColumn(modifier = modifier) {
-        items(20) {
+        items(items = repositoryList, key = { repositoryItem -> repositoryItem.id }) {
             GithubRepositoryRow(
-                fullName = "JetBrains/kotlin",
-                stargazersCount = 43500,
-                language = "Kotlin",
-                modifier = Modifier.fillMaxWidth(),
+                fullName = it.name,
+                stargazersCount = it.stargazersCount,
+                language = it.language,
                 onClick = {}
             )
             Divider()
+
         }
     }
 }
 
 @Composable
 private fun GithubRepositoryRow(
-    fullName: String,
-    stargazersCount: Int,
-    language: String,
     modifier: Modifier = Modifier,
+    fullName: String,
+    stargazersCount: Long,
+    language: String?,
     onClick: () -> Unit
 ) {
     Column(
@@ -148,16 +163,57 @@ private fun GithubRepositoryRow(
             )
             Text(text = stargazersCount.toString(), fontSize = 12.sp)
             Spacer(modifier = Modifier.width(12.dp))
-            Text(text = language, fontSize = 12.sp)
+            if (language != null) {
+                Text(text = language, fontSize = 12.sp)
+            }
         }
     }
 }
 
+@Composable
+private fun LoadingBody(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(modifier = Modifier)
+    }
+}
+
+val fakeRepositoryList =
+    List(20) {
+        RepositoryItem(
+            id = it.toLong(),
+            name = "t179a",
+            owner = Owner(avatarUrl = "https://github.com/t179a.png"),
+            language = "Kotlin",
+            stargazersCount = 1000,
+            watchersCount = 1000,
+            forksCount = 1000,
+            openIssuesCount = 1000
+        )
+    }
+
+@Preview
+@Composable
+private fun LoadingBodyPreview() {
+    LoadingBody()
+}
 
 @Preview
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen(onSearch = {})
+    SearchScreen(
+        onSearch = {},
+        onWordChange = {},
+        uiState = SearchUiState(
+            isLoading = false,
+            isError = false,
+            repositoryList = fakeRepositoryList
+        )
+    )
 }
 
 @Preview
@@ -175,13 +231,13 @@ private fun GithubRepositoryRowPreview() {
 @Preview(widthDp = 390, heightDp = 400)
 @Composable
 private fun SearchedResultListFieldPreview() {
-    SearchedResultListField()
+    SearchedResultListField(repositoryList = fakeRepositoryList)
 }
 
 @Preview
 @Composable
 private fun SearchTextFieldAppBarPreview() {
-    SearchTextFieldAppBar(onSearch = {})
+    SearchTextFieldAppBar(onSearch = {}, onWordChange = {}, searchWord = "")
 }
 
 @Preview
