@@ -12,6 +12,7 @@ data class SearchResponse(
 
 @Serializable
 data class RepositoryItem(
+    val id: Long,
     @SerialName("full_name")
     val name: String,
     val owner: Owner,
