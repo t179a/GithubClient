@@ -24,15 +24,15 @@ class SearchViewModel @Inject constructor(
     fun onSearchRepository(word: String) {
         viewModelScope.launch {
            _searchUiState.update {
-               it.copy(loading = true)
+               it.copy(isLoading = true)
            }
             searchRepository.search(word).catch {
                 _searchUiState.update {
-                    it.copy(loading = false, error = true)
+                    it.copy(isLoading = false, isError = true)
                 }
             }.collect {repositoryList ->
                 _searchUiState.update {searchUiState ->
-                    searchUiState.copy(loading = false, repositoryList = repositoryList)
+                    searchUiState.copy(isLoading = false, repositoryList = repositoryList)
                 }
             }
         }
@@ -47,8 +47,8 @@ class SearchViewModel @Inject constructor(
 
 
 data class SearchUiState(
-    val loading: Boolean = false,
-    val error: Boolean = false,
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
     val repositoryList: List<RepositoryItem> = emptyList(),
     val searchWord: String = ""
 )
