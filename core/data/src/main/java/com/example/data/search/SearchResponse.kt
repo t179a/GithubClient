@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchResponse(
+    @SerialName("items")
     val RepositoryList: List<RepositoryItem>
 )
 
