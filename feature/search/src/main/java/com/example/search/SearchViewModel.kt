@@ -2,8 +2,8 @@ package com.example.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.search.RepositoryItem
 import com.example.data.search.SearchRepository
+import com.example.data.search.UserItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,18 +21,18 @@ class SearchViewModel @Inject constructor(
 
     val searchUiState: StateFlow<SearchUiState> = _searchUiState
 
-    fun onSearchRepository(word: String) {
+    fun onSearchUsers(word: String) {
         viewModelScope.launch {
            _searchUiState.update {
                it.copy(isLoading = true)
            }
-            searchRepository.search(word).catch {
+            searchRepository.searchUsers(word).catch {
                 _searchUiState.update {
                     it.copy(isLoading = false, isError = true)
                 }
             }.collect {repositoryList ->
                 _searchUiState.update {searchUiState ->
-                    searchUiState.copy(isLoading = false, repositoryList = repositoryList)
+                    searchUiState.copy(isLoading = false, userList = repositoryList)
                 }
             }
         }
@@ -49,6 +49,6 @@ class SearchViewModel @Inject constructor(
 data class SearchUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val repositoryList: List<RepositoryItem> = emptyList(),
+    val userList: List<UserItem> = emptyList(),
     val searchWord: String = ""
 )
