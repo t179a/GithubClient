@@ -8,9 +8,16 @@ import kotlinx.coroutines.flow.callbackFlow
 class SearchRepository(
     private val searchApi: SearchApi
 ) {
-    fun search(word: String): Flow<PersistentList<RepositoryItem>> {
+    fun searchRepository(word: String): Flow<PersistentList<RepositoryItem>> {
         return callbackFlow {
             send(searchApi.searchRepository(word))
+            awaitClose {}
+        }
+    }
+
+    fun searchUsers(word: String): Flow<PersistentList<UserItem>> {
+        return callbackFlow {
+            send(searchApi.searchUser(word))
             awaitClose {}
         }
     }
