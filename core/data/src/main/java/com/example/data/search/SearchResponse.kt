@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchRepositoriesResponse(
     @SerialName("items")
-    val RepositoryList: List<RepositoryItem>
+    val repositoryList: List<RepositoryItem>
 )
 
 @Serializable
@@ -31,4 +31,28 @@ data class RepositoryItem(
 data class Owner(
     @SerialName("avatar_url")
     val avatarUrl: String
+)
+
+@Serializable
+data class SearchUsersResponse(
+    @SerialName("items")
+    val userList: List<UserItem>
+)
+
+@Serializable
+data class UserItem(
+    @SerialName("login")
+    val userName: String,
+    @SerialName("id")
+    val userId: Long,
+    @SerialName("url")
+    val userUrl: String,
+    @SerialName("avatar_url")
+    val avatarUrl: String,
+    @SerialName("followers_url")
+    val followersUrl: String,
+    @SerialName("following_url")
+    val followingUrl: String,
+    @SerialName("repos_url")
+    val repositoryUrl: String
 )
