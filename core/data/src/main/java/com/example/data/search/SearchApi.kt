@@ -7,7 +7,7 @@ class SearchApi(
     private val networkService: SearchNetworkService
 ) {
     suspend fun searchRepository(word: String): PersistentList<RepositoryItem> {
-        return networkService.get<SearchResponse>(
+        return networkService.get<SearchRepositoriesResponse>(
             url = "https://api.github.com/search/repositories",
             query = word
         ).RepositoryList.toPersistentList()
