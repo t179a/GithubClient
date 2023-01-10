@@ -10,7 +10,14 @@ class SearchApi(
         return networkService.get<SearchRepositoriesResponse>(
             url = "https://api.github.com/search/repositories",
             query = word
-        ).RepositoryList.toPersistentList()
+        ).repositoryList.toPersistentList()
+    }
+
+    suspend fun searchUser(word: String): PersistentList<UserItem> {
+        return networkService.get<SearchUsersResponse>(
+            url = "https://api.github.com/search/users",
+            query = word
+        ).userList.toPersistentList()
     }
 }
 
