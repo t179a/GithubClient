@@ -5,15 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -22,8 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.data.search.Owner
-import com.example.data.search.RepositoryItem
+import coil.compose.AsyncImage
+import com.example.data.search.UserItem
 
 //TODO importで「*」を使っている点を修正
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,7 @@ fun SearchScreen(
         } else {
             SearchedResultListField(
                 modifier = Modifier.padding(innerPadding),
-                repositoryList = uiState.repositoryList,
+                userList = uiState.userList,
             )
         }
 
@@ -120,14 +121,13 @@ private fun SearchTextField(
 @Composable
 private fun SearchedResultListField(
     modifier: Modifier = Modifier,
-    repositoryList: List<RepositoryItem>
+    userList: List<UserItem>
 ) {
     LazyColumn(modifier = modifier) {
-        items(items = repositoryList, key = { repositoryItem -> repositoryItem.id }) {
-            GithubRepositoryRow(
-                fullName = it.name,
-                stargazersCount = it.stargazersCount,
-                language = it.language,
+        items(items = userList, key = { userItem -> userItem.userId }) {
+            GithubUserRow(
+                userName = it.userName,
+                userIconUrl = it.avatarUrl,
                 onClick = {}
             )
             Divider()
@@ -137,37 +137,34 @@ private fun SearchedResultListField(
 }
 
 @Composable
-private fun GithubRepositoryRow(
+private fun GithubUserRow(
     modifier: Modifier = Modifier,
-    fullName: String,
-    stargazersCount: Long,
-    language: String?,
+    userName: String,
+    userIconUrl: String,
     onClick: () -> Unit
 ) {
-    Column(
+    Row(
         modifier = modifier
             .clickable(onClick = onClick)
             .padding(4.dp)
     ) {
+        AsyncImage(
+            model = userIconUrl, contentDescription = "user_icon", modifier = Modifier
+                .clip(
+                    CircleShape
+                )
+                .size(48.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
-            text = fullName,
+            text = userName,
             fontSize = 16.sp,
             textAlign = TextAlign.Left,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth()
         )
-        Row {
-            Icon(
-                painter = rememberVectorPainter(image = Icons.Default.Star),
-                contentDescription = "star icon",
-                modifier = Modifier.height(16.dp)
-            )
-            Text(text = stargazersCount.toString(), fontSize = 12.sp)
-            Spacer(modifier = Modifier.width(12.dp))
-            if (language != null) {
-                Text(text = language, fontSize = 12.sp)
-            }
-        }
+
     }
+
 }
 
 @Composable
@@ -184,23 +181,17 @@ private fun LoadingBody(
 
 val fakeRepositoryList =
     List(20) {
-        RepositoryItem(
-            id = it.toLong(),
-            name = "t179a",
-            owner = Owner(avatarUrl = "https://github.com/t179a.png"),
-            language = "Kotlin",
-            stargazersCount = 1000,
-            watchersCount = 1000,
-            forksCount = 1000,
-            openIssuesCount = 1000
+        UserItem(
+            userName = "torvalds",
+            userId = it.toLong(),
+            userUrl = "https://api.github.com/users/torvalds",
+            avatarUrl = "https://avatars.githubusercontent.com/u/1024025?v=4",
+            followersUrl = "https://api.github.com/users/torvalds/followers",
+            followingUrl = "https://api.github.com/users/torvalds/following{/other_user}",
+            repositoryUrl = "https://api.github.com/users/torvalds/repos",
         )
     }
 
-@Preview
-@Composable
-private fun LoadingBodyPreview() {
-    LoadingBody()
-}
 
 @Preview
 @Composable
@@ -211,7 +202,7 @@ private fun SearchScreenPreview() {
         uiState = SearchUiState(
             isLoading = false,
             isError = false,
-            repositoryList = fakeRepositoryList
+            userList = fakeRepositoryList
         )
     )
 }
@@ -219,19 +210,18 @@ private fun SearchScreenPreview() {
 @Preview
 @Composable
 private fun GithubRepositoryRowPreview() {
-    GithubRepositoryRow(
-        fullName = "JetBrains/kotlin",
-        stargazersCount = 43500,
-        language = "Kotlin",
+    GithubUserRow(
+        userName = "",
         modifier = Modifier.fillMaxWidth(),
-        onClick = {}
+        onClick = {},
+        userIconUrl = "https://avatars.githubusercontent.com/u/1024025?v=4"
     )
 }
 
 @Preview(widthDp = 390, heightDp = 400)
 @Composable
 private fun SearchedResultListFieldPreview() {
-    SearchedResultListField(repositoryList = fakeRepositoryList)
+    SearchedResultListField(userList = fakeRepositoryList)
 }
 
 @Preview
@@ -244,4 +234,10 @@ private fun SearchTextFieldAppBarPreview() {
 @Composable
 private fun SearchTextFieldPreview() {
     SearchTextField(onSearch = {}, word = "", onWordChange = {}, modifier = Modifier)
+}
+
+@Preview(widthDp = 390, heightDp = 400)
+@Composable
+private fun LoadingBodyPreview() {
+    LoadingBody()
 }
