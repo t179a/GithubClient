@@ -17,8 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -153,14 +155,16 @@ private fun GithubUserRow(
                 .clip(
                     CircleShape
                 )
-                .size(48.dp)
+                .size(48.dp), placeholder = painterResource(id = R.drawable.ic_android_black_24dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = userName,
             fontSize = 16.sp,
             textAlign = TextAlign.Left,
-            modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth()
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth()
         )
 
     }
@@ -182,7 +186,7 @@ private fun LoadingBody(
 val fakeRepositoryList =
     List(20) {
         UserItem(
-            userName = "torvalds",
+            userName = "android",
             userId = it.toLong(),
             userUrl = "https://api.github.com/users/torvalds",
             avatarUrl = "https://avatars.githubusercontent.com/u/1024025?v=4",
@@ -234,10 +238,4 @@ private fun SearchTextFieldAppBarPreview() {
 @Composable
 private fun SearchTextFieldPreview() {
     SearchTextField(onSearch = {}, word = "", onWordChange = {}, modifier = Modifier)
-}
-
-@Preview(widthDp = 390, heightDp = 400)
-@Composable
-private fun LoadingBodyPreview() {
-    LoadingBody()
 }
