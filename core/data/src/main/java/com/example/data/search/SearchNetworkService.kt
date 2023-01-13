@@ -7,7 +7,7 @@ import io.ktor.client.request.*
 class SearchNetworkService(val httpClient: HttpClient) {
     suspend inline fun <reified T : Any> get(
         url: String,
-        query: String,
+        query: String = "",
         sort: String = "indexed",
         order: String = "desc",
         perPage: Int = 30,
@@ -18,7 +18,10 @@ class SearchNetworkService(val httpClient: HttpClient) {
                 append("accept", "application/vnd.github+json")
             }
             url {
-                parameters.append("q", query)
+                if(query.isNotEmpty()){
+                    parameters.append("q", query)
+
+                }
                 parameters.append("sort", sort)
                 parameters.append("order", order)
                 parameters.append("per_page", perPage.toString())
