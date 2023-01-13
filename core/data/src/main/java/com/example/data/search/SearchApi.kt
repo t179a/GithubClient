@@ -19,6 +19,19 @@ class SearchApi(
             query = word
         ).userList.toPersistentList()
     }
+
+    suspend fun getFollowers(userName: String): PersistentList<UserItem> {
+        return networkService.get<List<UserItem>>(
+            url = "https://api.github.com/users/${userName}/followers"
+        ).toPersistentList()
+    }
+
+    suspend fun getFollowing(userName: String): PersistentList<UserItem> {
+        return networkService.get<List<UserItem>>(
+            url = "https://api.github.com/users/${userName}/following"
+        ).toPersistentList()
+    }
+
 }
 
 
