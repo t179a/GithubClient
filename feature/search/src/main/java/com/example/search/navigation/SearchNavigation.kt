@@ -1,11 +1,12 @@
 package com.example.search.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
+import android.net.Uri
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.example.search.SearchRoute
-import com.example.search.SearchScreen
+import com.example.search.UserDetailScreen
 
 const val searchNavigationRoute = "search_route"
 
@@ -13,8 +14,27 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     this.navigate(searchNavigationRoute, navOptions)
 }
 
-fun NavGraphBuilder.searchScreen() {
+fun NavController.navigateToDetail(userName: String) {
+    //val encodedId = Uri.encode(userName)
+    this.navigate("user_route/$userName")
+}
+
+fun NavGraphBuilder.searchScreen(
+    onUserRowClick: (String) -> Unit,
+) {
     composable(route = searchNavigationRoute) {
-        SearchRoute()
+        SearchRoute(onUserClick = onUserRowClick)
     }
+    composable(
+        route = SearchNavGraph.userDetailRoute("{userName}"),
+        arguments = listOf(navArgument("userName"){
+            type = NavType.StringType
+        })
+    ) {
+        UserDetailScreen(modifier = Modifier, onClick = {}, viewModel = hiltViewModel())
+    }
+}
+
+object SearchNavGraph {
+    fun userDetailRoute(userName: String) = "user_route/$userName"
 }

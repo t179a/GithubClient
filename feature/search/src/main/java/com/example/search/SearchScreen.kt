@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -35,6 +34,7 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     onSearch: (String) -> Unit,
     onWordChange: (String) -> Unit,
+    onUserRowClick: (String) -> Unit,
     uiState: SearchUiState
 ) {
     Scaffold(
@@ -52,6 +52,7 @@ fun SearchScreen(
         } else {
             SearchedResultListField(
                 modifier = Modifier.padding(innerPadding),
+                onUserRowClick = onUserRowClick,
                 userList = uiState.userList,
             )
         }
@@ -123,6 +124,7 @@ private fun SearchTextField(
 @Composable
 private fun SearchedResultListField(
     modifier: Modifier = Modifier,
+    onUserRowClick: (String) -> Unit,
     userList: List<UserItem>
 ) {
     LazyColumn(modifier = modifier) {
@@ -130,7 +132,7 @@ private fun SearchedResultListField(
             GithubUserRow(
                 userName = it.userName,
                 userIconUrl = it.avatarUrl,
-                onClick = {}
+                onClick = {onUserRowClick(it.userName)}
             )
             Divider()
 
@@ -203,6 +205,7 @@ private fun SearchScreenPreview() {
     SearchScreen(
         onSearch = {},
         onWordChange = {},
+        onUserRowClick = {},
         uiState = SearchUiState(
             isLoading = false,
             isError = false,
@@ -225,7 +228,7 @@ private fun GithubRepositoryRowPreview() {
 @Preview(widthDp = 390, heightDp = 400)
 @Composable
 private fun SearchedResultListFieldPreview() {
-    SearchedResultListField(userList = fakeRepositoryList)
+    SearchedResultListField(onUserRowClick = {},userList = fakeRepositoryList)
 }
 
 @Preview
