@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.data.search.UserItem
+import com.example.search.ui.EmptyCardRow
 import com.example.search.ui.UserCardRow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,12 +21,17 @@ fun UserDetailScreen(
     onClick: (Long) -> Unit,
     viewModel: UserDetailViewModel
 ) {
-    val uiState: UserDetailUiState by viewModel.userDetailState.collectAsState()
+    val uiState: UserDetailUiState by viewModel.userDetailUiState.collectAsState()
     Scaffold(modifier = modifier) { innerPadding ->
-        if(uiState.isLoading) {
+        if (uiState.isLoading) {
             LoadingBody(modifier.padding(innerPadding))
-        } else{
-            UserDetailBody(modifier = Modifier.padding(innerPadding), onClick = onClick, userList = uiState.userList)
+        } else {
+            UserDetailBody(
+                modifier = Modifier.padding(innerPadding),
+                onClick = onClick,
+                followingList = uiState.followingList,
+                followersList = uiState.followersList
+            )
         }
 
     }
@@ -45,16 +51,36 @@ private fun LoadingBody(
 
 @Composable
 fun UserDetailBody(
-    modifier: Modifier = Modifier, onClick: (Long) -> Unit, userList: List<UserItem>
+    modifier: Modifier = Modifier,
+    onClick: (Long) -> Unit,
+    followingList: List<UserItem>,
+    followersList: List<UserItem>
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Row(modifier = Modifier.padding(start = 24.dp)) {
-            Text(text = "follower", color = MaterialTheme.colorScheme.primary,style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = "follower",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
-        UserCardRow(users = userList, onUserCardClick = onClick)
+        if (followersList.isEmpty()) {
+            EmptyCardRow(text = "no followers")
+        } else {
+            UserCardRow(users = followingList, onUserCardClick = onClick)
+
+        }
         Row(modifier = Modifier.padding(start = 24.dp)) {
-            Text(text = "following", color = MaterialTheme.colorScheme.primary,style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = "following",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
-        UserCardRow(users = userList, onUserCardClick = onClick)
+        if (followingList.isEmpty()) {
+            EmptyCardRow(text = "no following")
+        } else {
+            UserCardRow(users = followersList, onUserCardClick = onClick)
+        }
     }
 }
