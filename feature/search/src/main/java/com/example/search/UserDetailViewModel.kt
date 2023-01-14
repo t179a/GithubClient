@@ -41,11 +41,10 @@ class UserDetailViewModel @Inject constructor(
         val followingList by followingFlow.collectAsState(initial = null)
         val followersList by followersFlow.collectAsState(initial = null)
         return if (followersList == null || followingList == null) {
-            UserDetailUiState(isLoading = true, isError = false)
+            UserDetailUiState(isLoading = true)
         } else {
             UserDetailUiState(
                 isLoading = false,
-                isError = false,
                 followingList = followingList!!,
                 followersList = followersList!!
             )
