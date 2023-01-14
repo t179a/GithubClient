@@ -1,6 +1,5 @@
 package com.example.search.navigation
 
-import android.net.Uri
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
@@ -15,7 +14,6 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
 }
 
 fun NavController.navigateToDetail(userName: String) {
-    //val encodedId = Uri.encode(userName)
     this.navigate("user_route/$userName")
 }
 
