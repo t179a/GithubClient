@@ -24,8 +24,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.data.search.UserItem
+
+@Composable
+fun SearchRoute(
+    modifier: Modifier = Modifier,
+    onUserClick: (String) -> Unit,
+    viewModel: SearchViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.searchUiState.collectAsState()
+    SearchScreen(
+        modifier = modifier,
+        onSearch = { viewModel.onSearchUsers(it) },
+        onWordChange = { viewModel.onUpdateSearchWord(it) },
+        onUserRowClick = onUserClick,
+        uiState = uiState
+    )
+}
 
 //TODO importで「*」を使っている点を修正
 @OptIn(ExperimentalMaterial3Api::class)
