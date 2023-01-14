@@ -28,6 +28,18 @@ import coil.request.ImageRequest
 import com.example.data.search.UserItem
 import com.example.search.R
 
+@Composable
+fun EmptyCardRow(
+    modifier: Modifier = Modifier,
+    text: String
+) {
+    Box(modifier = modifier.background(color = MaterialTheme.colorScheme.primaryContainer)
+        .height(230.dp)
+        .fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Text(text = text)
+    }
+}
+
 
 @Composable
 fun UserCardRow(
@@ -117,4 +129,10 @@ private fun SnackImagePreview(
         repositoryUrl = ""
     )
     UserCardItem(userItem = sampleUserItem, onUserCardClick = {})
+}
+
+@Preview
+@Composable
+private fun EmptyRowPreview() {
+    EmptyCardRow(text = "No following")
 }
