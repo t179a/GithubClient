@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
+import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
 import com.example.data.search.UserDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,30 +28,34 @@ class UserDetailViewModel @Inject constructor(
     private val followers = userDetailRepository.getFollowers(userName)
     private val following = userDetailRepository.getFollowing(userName)
     private val user = userDetailRepository.getUser(userName)
+    private val repositories = userDetailRepository.getRepositories(userName)
     private val moleculeScope =
         CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
     val userDetailUiState: StateFlow<UserDetailUiState> =
         moleculeScope.launchMolecule(clock = RecompositionClock.ContextClock) {
-            userDetailPresenter(followingFlow = following, followersFlow = followers, userFlow = user)
+            userDetailPresenter(followingFlow = following, followersFlow = followers, userFlow = user, repositoriesFlow = repositories)
         }
 
     @Composable
     fun userDetailPresenter(
         followingFlow: Flow<PersistentList<GithubUserItem>>,
         followersFlow: Flow<PersistentList<GithubUserItem>>,
-        userFlow: Flow<GithubUserItem>
+        userFlow: Flow<GithubUserItem>,
+        repositoriesFlow: Flow<PersistentList<GithubRepositoryItem>>
     ): UserDetailUiState {
         //TODO 初期値がnullなのは多分良くないから、別の方法を考える
         val followingList by followingFlow.collectAsState(initial = null)
         val followersList by followersFlow.collectAsState(initial = null)
         val user by userFlow.collectAsState(initial = null)
-        return if (followersList == null || followingList == null || user == null) {
+        val repositoryList by repositoriesFlow.collectAsState(initial = null)
+        return if (followersList == null || followingList == null || user == null || repositoryList == null) {
             UserDetailUiState.Loading
         } else {
             UserDetailUiState.UiState(
                 userItem = user!!,
                 followingList = followingList!!,
-                followersList = followersList!!
+                followersList = followersList!!,
+                repositoryList = repositoryList!!
             )
         }
     }
@@ -62,7 +67,8 @@ sealed interface UserDetailUiState {
         val isError: Boolean = false,
         val userItem: GithubUserItem,
         val followingList: List<GithubUserItem> = emptyList(),
-        val followersList: List<GithubUserItem> = emptyList()
+        val followersList: List<GithubUserItem> = emptyList(),
+        val repositoryList: List<GithubRepositoryItem> = emptyList()
     ) : UserDetailUiState
 
     object Loading: UserDetailUiState
