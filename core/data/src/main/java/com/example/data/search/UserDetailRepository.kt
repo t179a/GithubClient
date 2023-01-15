@@ -20,4 +20,10 @@ class UserDetailRepository(
             awaitClose {}
         }
     }
+    fun getUser(word: String): Flow<UserItem> {
+        return callbackFlow {
+            send(searchApi.getUser(word))
+            awaitClose {}
+        }
+    }
 }

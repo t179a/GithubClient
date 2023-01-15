@@ -32,6 +32,11 @@ class SearchApi(
         ).toPersistentList()
     }
 
+    suspend fun getUser(userName: String): UserItem {
+        return networkService.get<UserItem>(
+            url = "https://api.github.com/users/${userName}"
+        )
+    }
 }
 
 
