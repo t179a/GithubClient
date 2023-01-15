@@ -26,25 +26,29 @@ class UserDetailViewModel @Inject constructor(
     private val userName: String = requireNotNull(savedStateHandle.get<String>("userName"))
     private val followers = userDetailRepository.getFollowers(userName)
     private val following = userDetailRepository.getFollowing(userName)
+    private val user = userDetailRepository.getUser(userName)
     private val moleculeScope =
         CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
     val userDetailUiState: StateFlow<UserDetailUiState> =
         moleculeScope.launchMolecule(clock = RecompositionClock.ContextClock) {
-            userDetailPresenter(followingFlow = following, followersFlow = followers)
+            userDetailPresenter(followingFlow = following, followersFlow = followers, userFlow = user)
         }
 
     @Composable
     fun userDetailPresenter(
         followingFlow: Flow<PersistentList<UserItem>>,
-        followersFlow: Flow<PersistentList<UserItem>>
+        followersFlow: Flow<PersistentList<UserItem>>,
+        userFlow: Flow<UserItem>
     ): UserDetailUiState {
+        //TODO 初期値がnullなのは多分良くないから、別の方法を考える
         val followingList by followingFlow.collectAsState(initial = null)
         val followersList by followersFlow.collectAsState(initial = null)
-        return if (followersList == null || followingList == null) {
-            UserDetailUiState(isLoading = true)
+        val user by userFlow.collectAsState(initial = null)
+        return if (followersList == null || followingList == null || user == null) {
+            UserDetailUiState.Loading
         } else {
-            UserDetailUiState(
-                isLoading = false,
+            UserDetailUiState.UiState(
+                userItem = user!!,
                 followingList = followingList!!,
                 followersList = followersList!!
             )
@@ -52,9 +56,14 @@ class UserDetailViewModel @Inject constructor(
     }
 }
 
-data class UserDetailUiState(
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val followingList: List<UserItem> = emptyList(),
-    val followersList: List<UserItem> = emptyList()
-)
+
+sealed interface UserDetailUiState {
+    data class UiState(
+        val isError: Boolean = false,
+        val userItem: UserItem,
+        val followingList: List<UserItem> = emptyList(),
+        val followersList: List<UserItem> = emptyList()
+    ) : UserDetailUiState
+
+    object Loading: UserDetailUiState
+}
