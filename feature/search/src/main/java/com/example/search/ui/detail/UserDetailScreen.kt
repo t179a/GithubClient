@@ -1,18 +1,21 @@
-package com.example.search
+package com.example.search.ui.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.data.search.UserItem
+import com.example.data.search.GithubUserItem
 import com.example.search.ui.EmptyCardRow
 import com.example.search.ui.UserCardRow
+import com.example.search.ui.UserImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,17 +26,21 @@ fun UserDetailScreen(
 ) {
     val uiState: UserDetailUiState by viewModel.userDetailUiState.collectAsState()
     Scaffold(modifier = modifier) { innerPadding ->
-        if (uiState.isLoading) {
-            LoadingBody(modifier.padding(innerPadding))
-        } else {
-            UserDetailBody(
-                modifier = Modifier.padding(innerPadding),
-                onClick = onClick,
-                followingList = uiState.followingList,
-                followersList = uiState.followersList
-            )
-        }
+        when (uiState) {
+            is UserDetailUiState.Loading -> {
+                LoadingBody(modifier.padding(innerPadding))
 
+            }
+            is UserDetailUiState.UiState -> {
+                UserDetailBody(
+                    modifier = Modifier.padding(innerPadding),
+                    onClick = onClick,
+                    userItem = (uiState as UserDetailUiState.UiState).userItem,
+                    followingList = (uiState as UserDetailUiState.UiState).followingList,
+                    followersList = (uiState as UserDetailUiState.UiState).followersList
+                )
+            }
+        }
     }
 }
 
@@ -50,13 +57,20 @@ private fun LoadingBody(
 }
 
 @Composable
-fun UserDetailBody(
+private fun UserDetailBody(
     modifier: Modifier = Modifier,
     onClick: (Long) -> Unit,
-    followingList: List<UserItem>,
-    followersList: List<UserItem>
+    userItem: GithubUserItem,
+    followingList: List<GithubUserItem>,
+    followersList: List<GithubUserItem>
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        UserImage(imageUrl = userItem.avatarUrl, modifier = Modifier
+            .size(300.dp)
+            .align(CenterHorizontally), shape = RoundedCornerShape(30.dp))
+        Spacer(modifier = Modifier.padding(12.dp))
+        Text(text = userItem.userName, modifier = Modifier.align(CenterHorizontally), style = MaterialTheme.typography.headlineLarge)
+        Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
             Text(
                 text = "follower",
@@ -70,6 +84,7 @@ fun UserDetailBody(
             UserCardRow(users = followersList, onUserCardClick = onClick)
 
         }
+        Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
             Text(
                 text = "following",
@@ -81,6 +96,14 @@ fun UserDetailBody(
             EmptyCardRow(text = "no following")
         } else {
             UserCardRow(users = followingList, onUserCardClick = onClick)
+        }
+        Spacer(modifier = Modifier.padding(12.dp))
+        Row(modifier = Modifier.padding(start = 24.dp)) {
+            Text(
+                text = "Repository",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium
+            )
         }
     }
 }

@@ -1,9 +1,9 @@
-package com.example.search
+package com.example.search.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.search.GithubUserItem
 import com.example.data.search.SearchRepository
-import com.example.data.search.UserItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,6 +49,6 @@ class SearchViewModel @Inject constructor(
 data class SearchUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val userList: List<UserItem> = emptyList(),
+    val userList: List<GithubUserItem> = emptyList(),
     val searchWord: String = ""
 )

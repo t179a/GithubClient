@@ -6,34 +6,34 @@ import kotlinx.collections.immutable.toPersistentList
 class SearchApi(
     private val networkService: SearchNetworkService
 ) {
-    suspend fun searchRepository(word: String): PersistentList<RepositoryItem> {
+    suspend fun searchRepository(word: String): PersistentList<GithubRepositoryItem> {
         return networkService.get<SearchRepositoriesResponse>(
             url = "https://api.github.com/search/repositories",
             query = word
         ).repositoryList.toPersistentList()
     }
 
-    suspend fun searchUser(word: String): PersistentList<UserItem> {
+    suspend fun searchUser(word: String): PersistentList<GithubUserItem> {
         return networkService.get<SearchUsersResponse>(
             url = "https://api.github.com/search/users",
             query = word
         ).userList.toPersistentList()
     }
 
-    suspend fun getFollowers(userName: String): PersistentList<UserItem> {
-        return networkService.get<List<UserItem>>(
+    suspend fun getFollowers(userName: String): PersistentList<GithubUserItem> {
+        return networkService.get<List<GithubUserItem>>(
             url = "https://api.github.com/users/${userName}/followers"
         ).toPersistentList()
     }
 
-    suspend fun getFollowing(userName: String): PersistentList<UserItem> {
-        return networkService.get<List<UserItem>>(
+    suspend fun getFollowing(userName: String): PersistentList<GithubUserItem> {
+        return networkService.get<List<GithubUserItem>>(
             url = "https://api.github.com/users/${userName}/following"
         ).toPersistentList()
     }
 
-    suspend fun getUser(userName: String): UserItem {
-        return networkService.get<UserItem>(
+    suspend fun getUser(userName: String): GithubUserItem {
+        return networkService.get<GithubUserItem>(
             url = "https://api.github.com/users/${userName}"
         )
     }

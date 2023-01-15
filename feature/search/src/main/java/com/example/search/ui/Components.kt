@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.data.search.UserItem
+import com.example.data.search.GithubUserItem
 import com.example.search.R
 
 @Composable
@@ -33,7 +33,7 @@ fun EmptyCardRow(
     modifier: Modifier = Modifier,
     text: String
 ) {
-    Box(modifier = modifier.background(color = MaterialTheme.colorScheme.primaryContainer)
+    Box(modifier = modifier
         .height(230.dp)
         .fillMaxWidth(), contentAlignment = Alignment.Center) {
         Text(text = text)
@@ -43,7 +43,7 @@ fun EmptyCardRow(
 
 @Composable
 fun UserCardRow(
-    users: List<UserItem>,
+    users: List<GithubUserItem>,
     onUserCardClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -57,7 +57,7 @@ fun UserCardRow(
 
 @Composable
 fun UserCardItem(
-    userItem: UserItem,
+    userItem: GithubUserItem,
     onUserCardClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -102,9 +102,10 @@ fun UserCardItem(
 fun UserImage(
     imageUrl: String,
     modifier: Modifier = Modifier,
-    elevation: Dp = 5.dp
+    elevation: Dp = 5.dp,
+    shape: Shape = CircleShape
 ) {
-    Surface(shadowElevation = elevation, shape = CircleShape, modifier = modifier) {
+    Surface(shadowElevation = elevation, shape = shape, modifier = modifier) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current).data(imageUrl).build(),
             contentDescription = "icon",
@@ -115,11 +116,12 @@ fun UserImage(
     }
 }
 
+
 @Preview(widthDp = 300, heightDp = 300, uiMode = UI_MODE_TYPE_NORMAL)
 @Composable
 private fun SnackImagePreview(
 ) {
-    val sampleUserItem = UserItem(
+    val sampleUserItem = GithubUserItem(
         userName = "android",
         userId = 123,
         userUrl = "",

@@ -4,8 +4,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import com.example.search.SearchRoute
-import com.example.search.UserDetailScreen
+import com.example.search.ui.detail.UserDetailScreen
+import com.example.search.ui.search.SearchRoute
 
 const val searchNavigationRoute = "search_route"
 

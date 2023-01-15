@@ -1,4 +1,4 @@
-package com.example.search
+package com.example.search.ui.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,7 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.data.search.UserItem
+import com.example.data.search.GithubUserItem
+import com.example.search.R
 
 @Composable
 fun SearchRoute(
@@ -142,7 +143,7 @@ private fun SearchTextField(
 private fun SearchedResultListField(
     modifier: Modifier = Modifier,
     onUserRowClick: (String) -> Unit,
-    userList: List<UserItem>
+    userList: List<GithubUserItem>
 ) {
     LazyColumn(modifier = modifier) {
         items(items = userList, key = { userItem -> userItem.userId }) {
@@ -204,7 +205,7 @@ private fun LoadingBody(
 
 val fakeRepositoryList =
     List(20) {
-        UserItem(
+        GithubUserItem(
             userName = "android",
             userId = it.toLong(),
             userUrl = "https://api.github.com/users/torvalds",

@@ -1,4 +1,4 @@
-package com.example.search
+package com.example.search.ui.detail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import app.cash.molecule.AndroidUiDispatcher
 import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
+import com.example.data.search.GithubUserItem
 import com.example.data.search.UserDetailRepository
-import com.example.data.search.UserItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
@@ -36,9 +36,9 @@ class UserDetailViewModel @Inject constructor(
 
     @Composable
     fun userDetailPresenter(
-        followingFlow: Flow<PersistentList<UserItem>>,
-        followersFlow: Flow<PersistentList<UserItem>>,
-        userFlow: Flow<UserItem>
+        followingFlow: Flow<PersistentList<GithubUserItem>>,
+        followersFlow: Flow<PersistentList<GithubUserItem>>,
+        userFlow: Flow<GithubUserItem>
     ): UserDetailUiState {
         //TODO 初期値がnullなのは多分良くないから、別の方法を考える
         val followingList by followingFlow.collectAsState(initial = null)
@@ -60,9 +60,9 @@ class UserDetailViewModel @Inject constructor(
 sealed interface UserDetailUiState {
     data class UiState(
         val isError: Boolean = false,
-        val userItem: UserItem,
-        val followingList: List<UserItem> = emptyList(),
-        val followersList: List<UserItem> = emptyList()
+        val userItem: GithubUserItem,
+        val followingList: List<GithubUserItem> = emptyList(),
+        val followersList: List<GithubUserItem> = emptyList()
     ) : UserDetailUiState
 
     object Loading: UserDetailUiState
