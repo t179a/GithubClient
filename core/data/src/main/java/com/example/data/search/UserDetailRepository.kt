@@ -26,4 +26,11 @@ class UserDetailRepository(
             awaitClose {}
         }
     }
+
+    fun getRepositories(userName: String): Flow<PersistentList<GithubRepositoryItem>> {
+        return callbackFlow {
+            send(searchApi.getRepositories(userName))
+            awaitClose {}
+        }
+    }
 }

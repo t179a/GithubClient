@@ -37,6 +37,12 @@ class SearchApi(
             url = "https://api.github.com/users/${userName}"
         )
     }
+
+    suspend fun getRepositories(userName: String): PersistentList<GithubRepositoryItem> {
+        return networkService.get<List<GithubRepositoryItem>>(
+            url = "https://api.github.com/users/${userName}/repos"
+        ).toPersistentList()
+    }
 }
 
 
