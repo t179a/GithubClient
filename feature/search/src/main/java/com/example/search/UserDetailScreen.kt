@@ -67,7 +67,7 @@ fun UserDetailBody(
         if (followersList.isEmpty()) {
             EmptyCardRow(text = "no followers")
         } else {
-            UserCardRow(users = followingList, onUserCardClick = onClick)
+            UserCardRow(users = followersList, onUserCardClick = onClick)
 
         }
         Row(modifier = Modifier.padding(start = 24.dp)) {
@@ -80,7 +80,7 @@ fun UserDetailBody(
         if (followingList.isEmpty()) {
             EmptyCardRow(text = "no following")
         } else {
-            UserCardRow(users = followersList, onUserCardClick = onClick)
+            UserCardRow(users = followingList, onUserCardClick = onClick)
         }
     }
 }
