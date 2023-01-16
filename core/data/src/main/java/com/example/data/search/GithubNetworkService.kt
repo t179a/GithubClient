@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 
-class SearchNetworkService(val httpClient: HttpClient) {
+class GithubNetworkService(val httpClient: HttpClient) {
     suspend inline fun <reified T : Any> get(
         url: String,
         query: String = "",
