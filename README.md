@@ -1,6 +1,6 @@
 # GithubClient
 
-##Dependencies
+## Dependencies
 - DI
     - dagger:hilt
 - Navigation
