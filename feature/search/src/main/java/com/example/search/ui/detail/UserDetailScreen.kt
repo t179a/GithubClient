@@ -8,16 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
-import com.example.search.ui.EmptyCardRow
-import com.example.search.ui.RepositoryCardRow
-import com.example.search.ui.UserCardRow
-import com.example.search.ui.UserImage
+import com.example.search.ui.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +50,7 @@ private fun LoadingBody(
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Center
     ) {
         CircularProgressIndicator(modifier = Modifier)
     }
@@ -70,11 +67,17 @@ private fun UserDetailBody(
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.padding(12.dp))
-        UserImage(imageUrl = userItem.avatarUrl, modifier = Modifier
-            .size(300.dp)
-            .align(CenterHorizontally), shape = RoundedCornerShape(30.dp))
+        UserImage(
+            imageUrl = userItem.avatarUrl, modifier = Modifier
+                .size(300.dp)
+                .align(CenterHorizontally), shape = RoundedCornerShape(30.dp)
+        )
         Spacer(modifier = Modifier.padding(12.dp))
-        Text(text = userItem.userName, modifier = Modifier.align(CenterHorizontally), style = MaterialTheme.typography.headlineLarge)
+        Text(
+            text = userItem.userName, modifier = Modifier
+                .align(CenterHorizontally)
+                .padding(8.dp), style = MaterialTheme.typography.headlineLarge
+        )
         Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
             Text(
@@ -83,11 +86,16 @@ private fun UserDetailBody(
                 style = MaterialTheme.typography.headlineMedium
             )
         }
-        if (followersList.isEmpty()) {
-            EmptyCardRow(modifier = Modifier.height(230.dp),text = "no followers")
-        } else {
-            UserCardRow(users = followersList, onUserCardClick = onClick)
-
+        Box(
+            modifier = Modifier
+                .height(230.dp)
+                .fillMaxWidth(), contentAlignment = Center
+        ) {
+            if (followersList.isEmpty()) {
+                EmptyCardRow(modifier = Modifier.height(230.dp), text = "no followers")
+            } else {
+                UserCardRow(users = followersList, onUserCardClick = onClick)
+            }
         }
         Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
@@ -97,10 +105,16 @@ private fun UserDetailBody(
                 style = MaterialTheme.typography.headlineMedium
             )
         }
-        if (followingList.isEmpty()) {
-            EmptyCardRow(modifier = Modifier.height(230.dp),text = "no following")
-        } else {
-            UserCardRow(users = followingList, onUserCardClick = onClick)
+        Box(
+            modifier = Modifier
+                .height(230.dp)
+                .fillMaxWidth(), contentAlignment = Center
+        ) {
+            if (followingList.isEmpty()) {
+                EmptyCardRow(modifier = Modifier.height(230.dp), text = "no following")
+            } else {
+                UserCardRow(users = followingList, onUserCardClick = onClick)
+            }
         }
         Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
@@ -110,10 +124,18 @@ private fun UserDetailBody(
                 style = MaterialTheme.typography.headlineMedium
             )
         }
-        if(repositoryList.isEmpty()) {
-            EmptyCardRow(modifier = Modifier.height(160.dp),text = "no repository")
-        } else {
-            RepositoryCardRow(users = repositoryList, onUserCardClick = {})
+        Box(
+            modifier = Modifier
+                .height(160.dp)
+                .fillMaxWidth(), contentAlignment = Center
+        ) {
+            if (repositoryList.isEmpty()) {
+                EmptyCardRow(modifier = Modifier.height(160.dp), text = "no repository")
+            } else {
+                RepositoryCardRow(users = repositoryList)
+            }
         }
+        Spacer(modifier = Modifier.padding(12.dp))
     }
 }
+
