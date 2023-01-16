@@ -1,9 +1,6 @@
 package com.example.data.search.di
 
-import com.example.data.search.SearchApi
-import com.example.data.search.SearchNetworkService
-import com.example.data.search.SearchRepository
-import com.example.data.search.UserDetailRepository
+import com.example.data.search.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +25,7 @@ class SearchModule {
 
     @Provides
     @Singleton
-    fun provideSearchApi(searchNetworkService: SearchNetworkService): SearchApi {
+    fun provideSearchApi(searchNetworkService: GithubNetworkService): SearchApi {
         return SearchApi(searchNetworkService)
     }
 
@@ -36,7 +33,7 @@ class SearchModule {
     @Singleton
     fun provideSearchNetworkService(
         httpClient: HttpClient
-    ): SearchNetworkService {
-        return SearchNetworkService(httpClient)
+    ): GithubNetworkService {
+        return GithubNetworkService(httpClient)
     }
 }

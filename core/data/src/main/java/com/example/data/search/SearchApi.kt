@@ -4,7 +4,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 class SearchApi(
-    private val networkService: SearchNetworkService
+    private val networkService: GithubNetworkService
 ) {
     suspend fun searchRepository(word: String): PersistentList<GithubRepositoryItem> {
         return networkService.get<SearchRepositoriesResponse>(
