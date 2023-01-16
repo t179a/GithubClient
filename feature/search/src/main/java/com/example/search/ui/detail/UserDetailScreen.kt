@@ -12,8 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
 import com.example.search.ui.EmptyCardRow
+import com.example.search.ui.RepositoryCardRow
 import com.example.search.ui.UserCardRow
 import com.example.search.ui.UserImage
 
@@ -37,7 +39,8 @@ fun UserDetailScreen(
                     onClick = onClick,
                     userItem = (uiState as UserDetailUiState.UiState).userItem,
                     followingList = (uiState as UserDetailUiState.UiState).followingList,
-                    followersList = (uiState as UserDetailUiState.UiState).followersList
+                    followersList = (uiState as UserDetailUiState.UiState).followersList,
+                    repositoryList = (uiState as UserDetailUiState.UiState).repositoryList
                 )
             }
         }
@@ -62,9 +65,11 @@ private fun UserDetailBody(
     onClick: (Long) -> Unit,
     userItem: GithubUserItem,
     followingList: List<GithubUserItem>,
-    followersList: List<GithubUserItem>
+    followersList: List<GithubUserItem>,
+    repositoryList: List<GithubRepositoryItem>
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+        Spacer(modifier = Modifier.padding(12.dp))
         UserImage(imageUrl = userItem.avatarUrl, modifier = Modifier
             .size(300.dp)
             .align(CenterHorizontally), shape = RoundedCornerShape(30.dp))
@@ -79,7 +84,7 @@ private fun UserDetailBody(
             )
         }
         if (followersList.isEmpty()) {
-            EmptyCardRow(text = "no followers")
+            EmptyCardRow(modifier = Modifier.height(230.dp),text = "no followers")
         } else {
             UserCardRow(users = followersList, onUserCardClick = onClick)
 
@@ -93,7 +98,7 @@ private fun UserDetailBody(
             )
         }
         if (followingList.isEmpty()) {
-            EmptyCardRow(text = "no following")
+            EmptyCardRow(modifier = Modifier.height(230.dp),text = "no following")
         } else {
             UserCardRow(users = followingList, onUserCardClick = onClick)
         }
@@ -104,6 +109,11 @@ private fun UserDetailBody(
                 color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineMedium
             )
+        }
+        if(repositoryList.isEmpty()) {
+            EmptyCardRow(modifier = Modifier.height(160.dp),text = "no repository")
+        } else {
+            RepositoryCardRow(users = repositoryList, onUserCardClick = {})
         }
     }
 }

@@ -8,6 +8,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -15,16 +18,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
 import com.example.search.R
 
@@ -33,9 +39,10 @@ fun EmptyCardRow(
     modifier: Modifier = Modifier,
     text: String
 ) {
-    Box(modifier = modifier
-        .height(230.dp)
-        .fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth(), contentAlignment = Alignment.Center
+    ) {
         Text(text = text)
     }
 }
@@ -50,6 +57,19 @@ fun UserCardRow(
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 12.dp, end = 12.dp)) {
         items(users) { userItem ->
             UserCardItem(userItem = userItem, onUserCardClick = onUserCardClick)
+        }
+    }
+}
+
+@Composable
+fun RepositoryCardRow(
+    users: List<GithubRepositoryItem>,
+    onUserCardClick: (Long) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 12.dp, end = 12.dp)) {
+        items(users) { repositoryItem ->
+            RepositoryCard(repositoryItem = repositoryItem, onUserCardClick = onUserCardClick)
         }
     }
 }
@@ -116,6 +136,60 @@ fun UserImage(
     }
 }
 
+@Composable
+fun RepositoryCard(
+    repositoryItem: GithubRepositoryItem,
+    onUserCardClick: (Long) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .size(width = 320.dp, height = 160.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(color = MaterialTheme.colorScheme.secondaryContainer)
+    ) {
+        Text(
+            text = repositoryItem.name,
+            modifier = Modifier.padding(8.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Box(modifier = Modifier
+            .height(60.dp)
+            .fillMaxWidth()) {
+            repositoryItem.description?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.padding(8.dp),
+                    maxLines = 2,
+                    fontSize =12.sp,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Star,
+                contentDescription = "star_icon",
+                tint = Color.Yellow
+            )
+            Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                text = repositoryItem.stargazersCount.toString(),
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier.padding(12.dp))
+        }
+    }
+}
 
 @Preview(widthDp = 300, heightDp = 300, uiMode = UI_MODE_TYPE_NORMAL)
 @Composable
@@ -136,5 +210,5 @@ private fun SnackImagePreview(
 @Preview
 @Composable
 private fun EmptyRowPreview() {
-    EmptyCardRow(text = "No following")
+    EmptyCardRow(text = "No Repository")
 }
