@@ -15,6 +15,6 @@ fun GithubClientNavHost(
     startDestination: String = searchNavigationRoute
 ) {
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
-        searchScreen(onUserRowClick = { userName -> navController.navigateToDetail(userName) })
+        searchScreen(onUserRowClick = { userName -> navController.navigateToDetail(userName) }, onUserCardClick = {userName -> navController.navigateToDetail(userName = userName )})
     }
 }

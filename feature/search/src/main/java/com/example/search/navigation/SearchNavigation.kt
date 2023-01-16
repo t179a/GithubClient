@@ -23,6 +23,7 @@ fun NavController.navigateToDetail(userName: String) {
 
 fun NavGraphBuilder.searchScreen(
     onUserRowClick: (String) -> Unit,
+    onUserCardClick: (String) -> Unit
 ) {
     composable(route = searchNavigationRoute) {
         SearchRoute(onUserClick = onUserRowClick)
@@ -33,7 +34,7 @@ fun NavGraphBuilder.searchScreen(
             type = NavType.StringType
         })
     ) {
-        UserDetailScreen(modifier = Modifier, onClick = {}, viewModel = hiltViewModel())
+        UserDetailScreen(modifier = Modifier, onClick = onUserCardClick, viewModel = hiltViewModel())
     }
 }
 

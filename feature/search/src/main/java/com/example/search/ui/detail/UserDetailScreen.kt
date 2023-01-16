@@ -35,7 +35,7 @@ import com.example.search.ui.UserImage
 @Composable
 fun UserDetailScreen(
     modifier: Modifier = Modifier,
-    onClick: (Long) -> Unit,
+    onClick: (String) -> Unit,
     viewModel: UserDetailViewModel
 ) {
     val uiState: UserDetailUiState by viewModel.userDetailUiState.collectAsState()
@@ -74,7 +74,7 @@ private fun LoadingBody(
 @Composable
 private fun UserDetailBody(
     modifier: Modifier = Modifier,
-    onClick: (Long) -> Unit,
+    onClick: (String) -> Unit,
     userItem: GithubUserItem,
     followingList: List<GithubUserItem>,
     followersList: List<GithubUserItem>,

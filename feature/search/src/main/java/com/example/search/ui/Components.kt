@@ -61,7 +61,7 @@ fun EmptyCardRow(
 @Composable
 fun UserCardRow(
     users: List<GithubUserItem>,
-    onUserCardClick: (Long) -> Unit,
+    onUserCardClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 12.dp, end = 12.dp)) {
@@ -87,14 +87,14 @@ fun RepositoryCardRow(
 @Composable
 fun UserCardItem(
     userItem: GithubUserItem,
-    onUserCardClick: (Long) -> Unit,
+    onUserCardClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .size(width = 170.dp, height = 230.dp)
-            .clickable(onClick = { onUserCardClick(userItem.userId) })
+            .clickable(onClick = { onUserCardClick(userItem.userName) })
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(color = MaterialTheme.colorScheme.secondaryContainer)
