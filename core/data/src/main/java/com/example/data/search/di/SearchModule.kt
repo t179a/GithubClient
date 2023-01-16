@@ -1,11 +1,14 @@
 package com.example.data.search.di
 
-import com.example.data.search.*
+import com.example.data.search.GithubNetworkService
+import com.example.data.search.SearchApi
+import com.example.data.search.SearchRepository
+import com.example.data.search.UserDetailRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)

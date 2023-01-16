@@ -2,8 +2,12 @@ package com.example.search.navigation
 
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.*
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.search.ui.detail.UserDetailScreen
 import com.example.search.ui.search.SearchRoute
 
