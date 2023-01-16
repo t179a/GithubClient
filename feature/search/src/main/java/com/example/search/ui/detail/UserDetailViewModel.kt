@@ -35,7 +35,7 @@ class UserDetailViewModel @Inject constructor(
         moleculeScope.launchMolecule(clock = RecompositionClock.ContextClock) {
             userDetailPresenter(followingFlow = following, followersFlow = followers, userFlow = user, repositoriesFlow = repositories)
         }
-
+//TODO error handlingができていない点を修正
     @Composable
     fun userDetailPresenter(
         followingFlow: Flow<PersistentList<GithubUserItem>>,
