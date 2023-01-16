@@ -24,7 +24,8 @@ data class GithubRepositoryItem(
     @SerialName("forks_count")
     val forksCount: Long,
     @SerialName("open_issues_count")
-    val openIssuesCount: Long
+    val openIssuesCount: Long,
+    val description: String?
 )
 
 @Serializable
