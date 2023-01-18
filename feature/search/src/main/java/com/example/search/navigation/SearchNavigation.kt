@@ -4,7 +4,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -13,8 +12,8 @@ import com.example.search.ui.search.SearchRoute
 
 const val searchNavigationRoute = "search_route"
 
-fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
-    this.navigate(searchNavigationRoute, navOptions)
+fun NavController.navigateToSearch() {
+    this.navigate(searchNavigationRoute)
 }
 
 fun NavController.navigateToDetail(userName: String) {
