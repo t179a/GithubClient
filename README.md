@@ -1,5 +1,8 @@
 # GithubClient
 
+## UML
+- 時間があったら、[mermaid](https://mermaid.js.org/)か[PlantUML](https://plantuml.com/)で書くかも
+
 ## Dependencies
 - DI
     - [dagger:hilt](https://dagger.dev/hilt/)
