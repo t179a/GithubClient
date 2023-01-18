@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.example.search.navigation.navigateToDetail
 import com.example.search.navigation.searchNavigationRoute
 import com.example.search.navigation.searchScreen
+import com.example.setting.navigation.settingScreen
 
 @Composable
 fun GithubClientNavHost(
@@ -16,5 +17,6 @@ fun GithubClientNavHost(
 ) {
     NavHost(navController = navController, startDestination = startDestination, modifier = modifier) {
         searchScreen(onUserRowClick = { userName -> navController.navigateToDetail(userName) }, onUserCardClick = {userName -> navController.navigateToDetail(userName = userName )})
+        settingScreen()
     }
 }
