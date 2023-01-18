@@ -2,15 +2,15 @@
 
 ## Dependencies
 - DI
-    - dagger:hilt
+    - [dagger:hilt](https://dagger.dev/hilt/)
 - Navigation
-    - navigation-compose
+    - [navigation-compose](https://developer.android.com/jetpack/compose/navigation)
 - API
-    - ktor-client
-    - kotlinx-serialization
+    - [ktor-client](https://ktor.io/)
+    - [kotlinx-serialization](https://github.com/Kotlin/kotlinx.serialization)
 - UI
-    - Jetpack Compose
+    - [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - Image Loading
-    - Coil
+    - [Coil](https://coil-kt.github.io/coil/)
 - Presentation Logic
-    - Molecule
+    - [Molecule](https://github.com/cashapp/molecule)
