@@ -16,6 +16,6 @@ rootProject.name = "GithubClient"
 include ':app'
 include ':core:data'
 include ':feature:search'
-include ':feature:login'
+include ':feature:setting'
 
 

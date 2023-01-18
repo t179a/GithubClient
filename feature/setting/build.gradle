@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.login'
+    namespace 'com.example.setting'
     compileSdk 32
 
     defaultConfig {
