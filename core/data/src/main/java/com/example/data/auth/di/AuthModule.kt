@@ -2,6 +2,7 @@ package com.example.data.auth.di
 
 import com.example.data.auth.AuthApi
 import com.example.data.auth.AuthRepository
+import com.example.data.search.GithubNetworkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,11 @@ class AuthModule {
     @Singleton
     fun provideAuthRepository(authApi: AuthApi): AuthRepository {
         return AuthRepository(authApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthApi(githubNetworkService: GithubNetworkService): AuthApi {
+        return AuthApi(githubNetworkService)
     }
 }
