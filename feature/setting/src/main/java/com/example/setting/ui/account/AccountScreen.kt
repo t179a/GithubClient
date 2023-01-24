@@ -17,7 +17,7 @@ fun AccountScreen(
     modifier: Modifier = Modifier, navigateToLoginScreen: () -> Unit
 ) {
     val context = LocalContext.current
-    val pref = context.getSharedPreferences("githubSetting", Context.MODE_PRIVATE)
+    val pref = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(

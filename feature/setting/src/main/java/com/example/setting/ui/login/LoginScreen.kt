@@ -26,7 +26,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val oAuthState: String = UUID.randomUUID().toString()
-        context.getSharedPreferences("com.example.setting", Context.MODE_PRIVATE).edit().apply{
+        context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).edit().apply{
             putString("oAuthState",oAuthState)
             apply()
         }

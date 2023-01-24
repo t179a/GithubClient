@@ -16,7 +16,7 @@ private const val progressNavigationRoute = "progress_route"
 private const val accountNavigationRoute = "account_route"
 private const val uri = "org.example.android.t179a://callback"
 fun NavController.navigateToAccount(context: Context) {
-    val pref = context.getSharedPreferences("githubSetting", Context.MODE_PRIVATE)
+    val pref = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
     val accessToken = pref.getString("accessToken", "")
     if(accessToken!!.isEmpty()){
         this.navigate(loginNavigationRoute)

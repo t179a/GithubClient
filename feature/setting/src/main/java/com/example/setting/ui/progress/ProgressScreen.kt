@@ -25,7 +25,7 @@ fun ProgressScreen(
     val callbackIntent = activity.intent
     val callbackCode = callbackIntent?.data?.getQueryParameter("code")
     val receivedState = callbackIntent?.data?.getQueryParameter("state")
-    val submittedState = activity.getSharedPreferences("com.example.setting", Context.MODE_PRIVATE)?.getString("oAuthState", "")
+    val submittedState = activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)?.getString("oAuthState", "")
 
     LaunchedEffect(key1 = callbackCode) {
         viewModel.getAccessToken(callbackCode!!)
@@ -38,7 +38,7 @@ fun ProgressScreen(
     } else {
         if(receivedState == submittedState){
             LaunchedEffect(key1 = uiState.accessToken) {
-                activity.getSharedPreferences("githubSetting", Context.MODE_PRIVATE)?.edit()?.apply{
+                activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)?.edit()?.apply{
                     putString("accessToken", uiState.accessToken)
                     apply()
                 }
