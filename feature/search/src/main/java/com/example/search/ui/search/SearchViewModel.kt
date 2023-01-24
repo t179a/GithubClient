@@ -21,12 +21,12 @@ class SearchViewModel @Inject constructor(
 
     val searchUiState: StateFlow<SearchUiState> = _searchUiState
 
-    fun onSearchUsers(word: String) {
+    fun onSearchUsers(word: String, accessToken: String) {
         viewModelScope.launch {
            _searchUiState.update {
                it.copy(isLoading = true)
            }
-            searchRepository.searchUsers(word).catch {
+            searchRepository.searchUsers(word = word, accessToken = accessToken).catch {
                 _searchUiState.update {
                     it.copy(isLoading = false, isError = true)
                 }

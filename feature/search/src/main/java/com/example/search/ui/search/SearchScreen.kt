@@ -1,5 +1,6 @@
 package com.example.search.ui.search
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -58,19 +60,18 @@ fun SearchRoute(
     val uiState by viewModel.searchUiState.collectAsState()
     SearchScreen(
         modifier = modifier,
-        onSearch = { viewModel.onSearchUsers(it) },
+        onSearch = viewModel::onSearchUsers,
         onWordChange = { viewModel.onUpdateSearchWord(it) },
         onUserRowClick = onUserClick,
         uiState = uiState
     )
 }
 
-//TODO importで「*」を使っている点を修正
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    onSearch: (String) -> Unit,
+    onSearch: (String, String) -> Unit,
     onWordChange: (String) -> Unit,
     onUserRowClick: (String) -> Unit,
     uiState: SearchUiState
@@ -100,7 +101,7 @@ fun SearchScreen(
 
 @Composable
 private fun SearchTextFieldAppBar(
-    onSearch: (String) -> Unit,
+    onSearch: (String, String) -> Unit,
     onWordChange: (String) -> Unit,
     searchWord: String,
     modifier: Modifier = Modifier,
@@ -118,13 +119,16 @@ private fun SearchTextFieldAppBar(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
-    onSearch: (String) -> Unit,
+    onSearch: (String, String) -> Unit,
     word: String,
     onWordChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+    val context = LocalContext.current
+    val accessToken = context.getSharedPreferences("com.example.setting", Context.MODE_PRIVATE)
+        .getString("accessToken", "")
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -150,7 +154,7 @@ private fun SearchTextField(
             }
         },
         keyboardActions = KeyboardActions(onDone = {
-            onSearch(word)
+            onSearch(word, accessToken!!)
             keyboardController?.hide()
         }),
         singleLine = true,
@@ -170,7 +174,7 @@ private fun SearchedResultListField(
             GithubUserRow(
                 userName = it.userName,
                 userIconUrl = it.avatarUrl,
-                onClick = {onUserRowClick(it.userName)}
+                onClick = { onUserRowClick(it.userName) }
             )
             Divider()
 
@@ -237,11 +241,13 @@ val fakeRepositoryList =
     }
 
 
+private val previewFun = { word: String, accessToken: String -> }
+
 @Preview
 @Composable
 private fun SearchScreenPreview() {
     SearchScreen(
-        onSearch = {},
+        onSearch = previewFun,
         onWordChange = {},
         onUserRowClick = {},
         uiState = SearchUiState(
@@ -266,17 +272,17 @@ private fun GithubRepositoryRowPreview() {
 @Preview(widthDp = 390, heightDp = 400)
 @Composable
 private fun SearchedResultListFieldPreview() {
-    SearchedResultListField(onUserRowClick = {},userList = fakeRepositoryList)
+    SearchedResultListField(onUserRowClick = {}, userList = fakeRepositoryList)
 }
 
 @Preview
 @Composable
 private fun SearchTextFieldAppBarPreview() {
-    SearchTextFieldAppBar(onSearch = {}, onWordChange = {}, searchWord = "")
+    SearchTextFieldAppBar(onSearch = previewFun, onWordChange = {}, searchWord = "")
 }
 
 @Preview
 @Composable
 private fun SearchTextFieldPreview() {
-    SearchTextField(onSearch = {}, word = "", onWordChange = {}, modifier = Modifier)
+    SearchTextField(onSearch = previewFun, word = "", onWordChange = {}, modifier = Modifier)
 }

@@ -9,6 +9,7 @@ import io.ktor.client.request.post
 class GithubNetworkService(val httpClient: HttpClient) {
     suspend inline fun <reified T : Any> get(
         url: String,
+        accessToken: String = "",
         query: String = "",
         sort: String = "indexed",
         order: String = "desc",
@@ -18,6 +19,9 @@ class GithubNetworkService(val httpClient: HttpClient) {
         httpClient.get(url) {
             headers {
                 append("accept", "application/vnd.github+json")
+                if (accessToken.isNotEmpty()) {
+                    append("Authorization", "Bearer $accessToken")
+                }
             }
             url {
                 if (query.isNotEmpty()) {
