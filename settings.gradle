@@ -14,5 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "GithubClient"
 include ':app'
-include ':feature:search'
 include ':core:data'
+include ':feature:search'
+include ':feature:setting'
+
+
