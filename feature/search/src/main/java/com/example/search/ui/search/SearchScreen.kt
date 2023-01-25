@@ -127,9 +127,6 @@ private fun SearchTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
-    val accessToken = context.getSharedPreferences("com.example.setting", Context.MODE_PRIVATE)
-        .getString("accessToken", "")
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -154,6 +151,7 @@ private fun SearchTextField(
             }
         },
         keyboardActions = KeyboardActions(onDone = {
+            val accessToken = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).getString("accessToken", "")
             onSearch(word, accessToken!!)
             keyboardController?.hide()
         }),
