@@ -17,5 +17,4 @@ include ':app'
 include ':core:data'
 include ':feature:search'
 include ':feature:setting'
-
-
+include ':feature:favorite'
