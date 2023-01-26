@@ -8,6 +8,7 @@
 - SharedPreferencesの場合context経由でgetできるが
     - EncrypedSharedPreferencesを複数のmoduleで使う方法を考える
 - accessTokenの有効期限に対応
+- 全般的にエラーハンドリングしていない点を修正
    
 
 
