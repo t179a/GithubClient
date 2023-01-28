@@ -42,11 +42,11 @@ fun FavoriteScreen(modifier: Modifier = Modifier, viewModel: FavoriteViewModel =
     val uiState by viewModel.uiState.collectAsState()
     
     if(uiState is FavoriteUiState.Loading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        Box(modifier = modifier, contentAlignment = Alignment.Center){
             CircularProgressIndicator()
         }
     } else if(uiState is FavoriteUiState.Success){
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(modifier = modifier, verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = stringResource(id = R.string.favorite_title), fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(12.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()){
