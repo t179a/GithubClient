@@ -4,6 +4,7 @@ import com.example.data.search.GithubNetworkService
 import com.example.data.search.SearchApi
 import com.example.data.search.SearchRepository
 import com.example.data.search.UserDetailRepository
+import com.example.database.dao.GithubUserDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +23,8 @@ class SearchModule {
 
     @Provides
     @Singleton
-    fun provideSearchRepository(searchApi: SearchApi): SearchRepository {
-        return SearchRepository(searchApi)
+    fun provideSearchRepository(searchApi: SearchApi, githubUserDao: GithubUserDao): SearchRepository {
+        return SearchRepository(searchApi = searchApi, githubUserDao = githubUserDao)
     }
 
     @Provides
