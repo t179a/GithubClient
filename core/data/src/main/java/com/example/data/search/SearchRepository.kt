@@ -1,12 +1,15 @@
 package com.example.data.search
 
+import com.example.database.dao.GithubUserDao
+import com.example.database.model.GithubUser
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class SearchRepository(
-    private val searchApi: SearchApi
+    private val searchApi: SearchApi,
+    private val githubUserDao: GithubUserDao
 ) {
     fun searchRepository(
         word: String,
@@ -24,4 +27,13 @@ class SearchRepository(
             awaitClose {}
         }
     }
+
+    suspend fun saveUser(githubUser: GithubUser) {
+        githubUserDao.insertUser(githubUser)
+    }
+
+    suspend fun deleteUser(githubUser: GithubUser) {
+        githubUserDao.delete(githubUser)
+    }
+
 }
