@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.search.GithubUserItem
 import com.example.data.search.SearchRepository
+import com.example.database.model.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,6 +42,13 @@ class SearchViewModel @Inject constructor(
     fun onUpdateSearchWord(searchWord: String) {
         _searchUiState.update {
             it.copy(searchWord = searchWord)
+        }
+    }
+
+    fun onSaveUser(userItem: GithubUserItem) {
+        viewModelScope.launch {
+            val githubUser = GithubUser(userItem.userId, userItem.userName, userItem.avatarUrl)
+            searchRepository.saveUser(githubUser)
         }
     }
 }
