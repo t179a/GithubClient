@@ -1,8 +1,10 @@
 package com.example.search.ui.search
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +57,7 @@ import com.example.search.R
 @Composable
 fun SearchRoute(
     modifier: Modifier = Modifier,
-    onUserClick: (String) -> Unit,
+    onClickForDetail: (String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.searchUiState.collectAsState()
@@ -62,7 +65,8 @@ fun SearchRoute(
         modifier = modifier,
         onSearch = viewModel::onSearchUsers,
         onWordChange = { viewModel.onUpdateSearchWord(it) },
-        onUserRowClick = onUserClick,
+        onClickForDetail = onClickForDetail,
+        onClickForSave = {viewModel.onSaveUser(it)},
         uiState = uiState
     )
 }
@@ -73,7 +77,8 @@ fun SearchScreen(
     modifier: Modifier = Modifier,
     onSearch: (String, String) -> Unit,
     onWordChange: (String) -> Unit,
-    onUserRowClick: (String) -> Unit,
+    onClickForDetail: (String) -> Unit,
+    onClickForSave: (GithubUserItem) -> Unit,
     uiState: SearchUiState
 ) {
     Scaffold(
@@ -91,8 +96,9 @@ fun SearchScreen(
         } else {
             SearchedResultListField(
                 modifier = Modifier.padding(innerPadding),
-                onUserRowClick = onUserRowClick,
+                onClickForDetail = onClickForDetail,
                 userList = uiState.userList,
+                onClickForSave = onClickForSave
             )
         }
 
@@ -127,9 +133,6 @@ private fun SearchTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
-    val accessToken = context.getSharedPreferences("com.example.setting", Context.MODE_PRIVATE)
-        .getString("accessToken", "")
-
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -154,6 +157,9 @@ private fun SearchTextField(
             }
         },
         keyboardActions = KeyboardActions(onDone = {
+            val accessToken =
+                context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
+                    .getString("accessToken", "")
             onSearch(word, accessToken!!)
             keyboardController?.hide()
         }),
@@ -166,15 +172,17 @@ private fun SearchTextField(
 @Composable
 private fun SearchedResultListField(
     modifier: Modifier = Modifier,
-    onUserRowClick: (String) -> Unit,
-    userList: List<GithubUserItem>
+    onClickForDetail: (String) -> Unit,
+    userList: List<GithubUserItem>,
+    onClickForSave: (GithubUserItem) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
         items(items = userList, key = { userItem -> userItem.userId }) {
             GithubUserRow(
                 userName = it.userName,
                 userIconUrl = it.avatarUrl,
-                onClick = { onUserRowClick(it.userName) }
+                onClickForDetail = { onClickForDetail(it.userName) },
+                onClickForSave = {onClickForSave(it)}
             )
             Divider()
 
@@ -187,32 +195,41 @@ private fun GithubUserRow(
     modifier: Modifier = Modifier,
     userName: String,
     userIconUrl: String,
-    onClick: () -> Unit
+    onClickForDetail: () -> Unit,
+    onClickForSave: () -> Unit
+
 ) {
-    Row(
-        modifier = modifier
-            .clickable(onClick = onClick)
-            .padding(4.dp)
-    ) {
-        AsyncImage(
-            model = userIconUrl, contentDescription = "user_icon", modifier = Modifier
-                .clip(
-                    CircleShape
-                )
-                .size(48.dp), placeholder = painterResource(id = R.drawable.ic_android_black_24dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = userName,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Left,
+    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Row(
             modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .fillMaxWidth()
+                .clickable(onClick = onClickForDetail).weight(5f)
+                .padding(4.dp)
+        ) {
+            AsyncImage(
+                model = userIconUrl,
+                contentDescription = "user_icon",
+                modifier = Modifier
+                    .clip(
+                        CircleShape
+                    )
+                    .size(48.dp),
+                placeholder = painterResource(id = R.drawable.ic_android_black_24dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = userName,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+            )
+        }
+        Image(
+            imageVector = Icons.Default.FavoriteBorder,
+            contentDescription = "favorite",
+            modifier = Modifier.clickable(onClick = onClickForSave).weight(1f).padding(horizontal = 24.dp).size(24.dp)
         )
-
     }
-
 }
 
 @Composable
@@ -241,7 +258,7 @@ val fakeRepositoryList =
     }
 
 
-private val previewFun = { word: String, accessToken: String -> }
+private val previewFun = { _: String, _: String -> }
 
 @Preview
 @Composable
@@ -249,7 +266,8 @@ private fun SearchScreenPreview() {
     SearchScreen(
         onSearch = previewFun,
         onWordChange = {},
-        onUserRowClick = {},
+        onClickForDetail = {},
+        onClickForSave = {},
         uiState = SearchUiState(
             isLoading = false,
             isError = false,
@@ -264,7 +282,8 @@ private fun GithubRepositoryRowPreview() {
     GithubUserRow(
         userName = "",
         modifier = Modifier.fillMaxWidth(),
-        onClick = {},
+        onClickForDetail = {},
+        onClickForSave = {},
         userIconUrl = "https://avatars.githubusercontent.com/u/1024025?v=4"
     )
 }
@@ -272,7 +291,7 @@ private fun GithubRepositoryRowPreview() {
 @Preview(widthDp = 390, heightDp = 400)
 @Composable
 private fun SearchedResultListFieldPreview() {
-    SearchedResultListField(onUserRowClick = {}, userList = fakeRepositoryList)
+    SearchedResultListField(onClickForDetail = {}, userList = fakeRepositoryList, onClickForSave = {})
 }
 
 @Preview

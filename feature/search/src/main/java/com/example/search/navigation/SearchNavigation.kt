@@ -25,7 +25,7 @@ fun NavGraphBuilder.searchScreen(
     onUserCardClick: (String) -> Unit
 ) {
     composable(route = searchNavigationRoute) {
-        SearchRoute(onUserClick = onUserRowClick)
+        SearchRoute(onClickForDetail = onUserRowClick)
     }
     composable(
         route = SearchNavGraph.userDetailRoute("{userName}"),

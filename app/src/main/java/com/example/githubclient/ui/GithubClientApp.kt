@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.favorite.navigation.navigateToFavorite
 import com.example.githubclient.navigation.GithubClientNavHost
 import com.example.search.navigation.navigateToSearch
 import com.example.setting.navigation.navigateToAccount
@@ -46,7 +47,7 @@ fun GithubClientBottomBar(navController: NavController) {
     BottomAppBar(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             BottomAppBarItem(iconImageVector = Icons.Default.Search, iconDescription = "search", onClick = {navController.navigateToSearch()})
-            BottomAppBarItem(iconImageVector = Icons.Default.Favorite, iconDescription = "favorite")
+            BottomAppBarItem(iconImageVector = Icons.Default.Favorite, iconDescription = "favorite", onClick = {navController.navigateToFavorite()})
             BottomAppBarItem(iconImageVector = Icons.Default.AccountCircle, iconDescription = "account", onClick = {navController.navigateToAccount(context = context)})
         }
     }
