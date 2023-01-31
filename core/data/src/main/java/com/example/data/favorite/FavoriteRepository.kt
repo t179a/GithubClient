@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class FavoriteRepository(
     private val githubUserDao: GithubUserDao
 ) {
-    fun getAllUser():Flow<List<GithubUser>> {
+    fun getAllUser(): Flow<List<GithubUser>> {
         return githubUserDao.getAllUser()
     }
 

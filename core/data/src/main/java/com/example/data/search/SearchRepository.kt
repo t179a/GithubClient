@@ -11,7 +11,7 @@ class SearchRepository(
     private val searchApi: SearchApi,
     private val githubUserDao: GithubUserDao
 ) {
-    fun searchRepository(
+    fun searchRepositories(
         word: String,
         accessToken: String
     ): Flow<PersistentList<GithubRepositoryItem>> {
@@ -35,5 +35,4 @@ class SearchRepository(
     suspend fun deleteUser(githubUser: GithubUser) {
         githubUserDao.delete(githubUser)
     }
-
 }

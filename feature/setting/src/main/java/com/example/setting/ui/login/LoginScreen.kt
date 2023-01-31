@@ -17,8 +17,8 @@ import androidx.core.content.ContextCompat
 import com.example.setting.BuildConfig
 import java.util.UUID
 
-private const val authUrl = "https://github.com/login/oauth/authorize"
-private const val redirectUrl = "org.example.android.t179a://callback"
+private const val AUTHURL = "https://github.com/login/oauth/authorize"
+private const val REDIRECTURL = "org.example.android.t179a://callback"
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
@@ -26,13 +26,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val oAuthState: String = UUID.randomUUID().toString()
-        context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).edit().apply{
-            putString("oAuthState",oAuthState)
+        context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).edit().apply {
+            putString("oAuthState", oAuthState)
             apply()
         }
         val uri =
-            Uri.parse(authUrl).buildUpon().appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
-                .appendQueryParameter("redirect_uri", redirectUrl).appendQueryParameter("state", oAuthState).build()
+            Uri.parse(AUTHURL).buildUpon().appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
+                .appendQueryParameter("redirect_uri", REDIRECTURL).appendQueryParameter("state", oAuthState).build()
         val loginIntent = Intent(Intent.ACTION_VIEW, uri)
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -48,5 +48,3 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
-

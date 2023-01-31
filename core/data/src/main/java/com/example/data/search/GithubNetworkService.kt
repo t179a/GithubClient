@@ -1,10 +1,16 @@
 package com.example.data.search
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.SocketTimeoutException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
+import io.ktor.util.cio.ChannelReadException
+import kotlinx.coroutines.TimeoutCancellationException
 
 class GithubNetworkService(val httpClient: HttpClient) {
     suspend inline fun <reified T : Any> get(
@@ -26,7 +32,6 @@ class GithubNetworkService(val httpClient: HttpClient) {
             url {
                 if (query.isNotEmpty()) {
                     parameters.append("q", query)
-
                 }
                 parameters.append("sort", sort)
                 parameters.append("order", order)
@@ -35,7 +40,8 @@ class GithubNetworkService(val httpClient: HttpClient) {
             }
         }.body()
     } catch (e: Throwable) {
-        throw e
+        Log.d("GithubNetworkServiceError", e.message.toString())
+        throw e.toAppError()
     }
 
     suspend inline fun <reified T : Any> post(
@@ -55,6 +61,24 @@ class GithubNetworkService(val httpClient: HttpClient) {
             }
         }.body()
     } catch (e: Throwable) {
-        throw e
+        Log.d("GithubNetworkServiceError", e.message.toString())
+        throw e.toAppError()
+    }
+}
+
+public fun Throwable.toAppError(): AppError {
+    return when (this) {
+        is AppError -> this
+        is ResponseException ->
+            return AppError.ApiException.ServerException(this)
+        is ChannelReadException ->
+            return AppError.ApiException.NetworkException(this)
+        is TimeoutCancellationException,
+        is HttpRequestTimeoutException,
+        is SocketTimeoutException -> {
+            AppError.ApiException
+                .TimeoutException(this)
+        }
+        else -> AppError.UnknownException(this)
     }
 }

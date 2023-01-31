@@ -56,8 +56,8 @@ import com.example.search.R
 
 @Composable
 fun SearchRoute(
-    modifier: Modifier = Modifier,
     onClickForDetail: (String) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.searchUiState.collectAsState()
@@ -66,7 +66,7 @@ fun SearchRoute(
         onSearch = viewModel::onSearchUsers,
         onWordChange = { viewModel.onUpdateSearchWord(it) },
         onClickForDetail = onClickForDetail,
-        onClickForSave = {viewModel.onSaveUser(it)},
+        onClickForSave = { viewModel.onSaveUser(it) },
         uiState = uiState
     )
 }
@@ -74,12 +74,12 @@ fun SearchRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier,
     onSearch: (String, String) -> Unit,
     onWordChange: (String) -> Unit,
     onClickForDetail: (String) -> Unit,
     onClickForSave: (GithubUserItem) -> Unit,
-    uiState: SearchUiState
+    uiState: SearchUiState,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier,
@@ -101,7 +101,6 @@ fun SearchScreen(
                 onClickForSave = onClickForSave
             )
         }
-
     }
 }
 
@@ -118,10 +117,9 @@ private fun SearchTextFieldAppBar(
         onWordChange = onWordChange,
         modifier = modifier
     )
-
 }
 
-//TODO keyboardが自動で開かない点を修正
+// TODO keyboardが自動で開かない点を修正
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
@@ -165,16 +163,14 @@ private fun SearchTextField(
         }),
         singleLine = true,
     )
-
 }
-
 
 @Composable
 private fun SearchedResultListField(
-    modifier: Modifier = Modifier,
-    onClickForDetail: (String) -> Unit,
     userList: List<GithubUserItem>,
+    onClickForDetail: (String) -> Unit,
     onClickForSave: (GithubUserItem) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
         items(items = userList, key = { userItem -> userItem.userId }) {
@@ -182,27 +178,31 @@ private fun SearchedResultListField(
                 userName = it.userName,
                 userIconUrl = it.avatarUrl,
                 onClickForDetail = { onClickForDetail(it.userName) },
-                onClickForSave = {onClickForSave(it)}
+                onClickForSave = { onClickForSave(it) }
             )
             Divider()
-
         }
     }
 }
 
 @Composable
 private fun GithubUserRow(
-    modifier: Modifier = Modifier,
     userName: String,
     userIconUrl: String,
     onClickForDetail: () -> Unit,
-    onClickForSave: () -> Unit
+    onClickForSave: () -> Unit,
+    modifier: Modifier = Modifier
 
 ) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Row(
             modifier = Modifier
-                .clickable(onClick = onClickForDetail).weight(5f)
+                .clickable(onClick = onClickForDetail)
+                .weight(5f)
                 .padding(4.dp)
         ) {
             AsyncImage(
@@ -227,7 +227,11 @@ private fun GithubUserRow(
         Image(
             imageVector = Icons.Default.FavoriteBorder,
             contentDescription = "favorite",
-            modifier = Modifier.clickable(onClick = onClickForSave).weight(1f).padding(horizontal = 24.dp).size(24.dp)
+            modifier = Modifier
+                .clickable(onClick = onClickForSave)
+                .weight(1f)
+                .padding(horizontal = 24.dp)
+                .size(24.dp)
         )
     }
 }
@@ -257,7 +261,6 @@ val fakeRepositoryList =
         )
     }
 
-
 private val previewFun = { _: String, _: String -> }
 
 @Preview
@@ -286,18 +289,6 @@ private fun GithubRepositoryRowPreview() {
         onClickForSave = {},
         userIconUrl = "https://avatars.githubusercontent.com/u/1024025?v=4"
     )
-}
-
-@Preview(widthDp = 390, heightDp = 400)
-@Composable
-private fun SearchedResultListFieldPreview() {
-    SearchedResultListField(onClickForDetail = {}, userList = fakeRepositoryList, onClickForSave = {})
-}
-
-@Preview
-@Composable
-private fun SearchTextFieldAppBarPreview() {
-    SearchTextFieldAppBar(onSearch = previewFun, onWordChange = {}, searchWord = "")
 }
 
 @Preview

@@ -28,7 +28,6 @@ class ProgressViewModel @Inject constructor(private val authRepository: AuthRepo
     }
 }
 
-
 data class AccountUiState(
     val accessToken: String = ""
 )

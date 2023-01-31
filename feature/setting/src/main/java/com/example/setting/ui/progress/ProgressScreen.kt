@@ -15,9 +15,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun ProgressScreen(
-    modifier: Modifier,
-    viewModel: ProgressViewModel = hiltViewModel(),
-    navigateToAccountScreen: () -> Unit
+    navigateToAccountScreen: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ProgressViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -25,7 +25,11 @@ fun ProgressScreen(
     val callbackIntent = activity.intent
     val callbackCode = callbackIntent?.data?.getQueryParameter("code")
     val receivedState = callbackIntent?.data?.getQueryParameter("state")
-    val submittedState = activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)?.getString("oAuthState", "")
+    val submittedState =
+        activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)?.getString(
+            "oAuthState",
+            ""
+        )
 
     LaunchedEffect(key1 = callbackCode) {
         viewModel.getAccessToken(callbackCode!!)
@@ -36,12 +40,13 @@ fun ProgressScreen(
             CircularProgressIndicator()
         }
     } else {
-        if(receivedState == submittedState){
+        if (receivedState == submittedState) {
             LaunchedEffect(key1 = uiState.accessToken) {
-                activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)?.edit()?.apply{
-                    putString("accessToken", uiState.accessToken)
-                    apply()
-                }
+                activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
+                    ?.edit()?.apply {
+                        putString("accessToken", uiState.accessToken)
+                        apply()
+                    }
                 navigateToAccountScreen()
             }
         }

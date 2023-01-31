@@ -13,9 +13,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteViewModel @Inject constructor(private val favoriteRepository: FavoriteRepository): ViewModel() {
-    val uiState: StateFlow<FavoriteUiState> = favoriteRepository.getAllUser().map { FavoriteUiState.Success(it) }.stateIn(scope = viewModelScope,
-    started = SharingStarted.Eagerly, initialValue = FavoriteUiState.Loading)
+class FavoriteViewModel @Inject constructor(private val favoriteRepository: FavoriteRepository) :
+    ViewModel() {
+    val uiState: StateFlow<FavoriteUiState> =
+        favoriteRepository.getAllUser().map { FavoriteUiState.Success(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = FavoriteUiState.Loading
+        )
 
     fun deleteUser(githubUser: GithubUser) {
         viewModelScope.launch {
@@ -24,8 +29,7 @@ class FavoriteViewModel @Inject constructor(private val favoriteRepository: Favo
     }
 }
 
-
 sealed interface FavoriteUiState {
-    data class Success(val userList: List<GithubUser>): FavoriteUiState
+    data class Success(val userList: List<GithubUser>) : FavoriteUiState
     object Loading : FavoriteUiState
 }

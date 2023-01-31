@@ -29,10 +29,11 @@ import com.example.setting.navigation.navigateToAccount
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GithubClientApp() {
+fun GithubClientApp(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = {GithubClientBottomBar(navController = navController)}
+        modifier = modifier,
+        bottomBar = { GithubClientBottomBar(navController = navController) }
     ) { innerPadding ->
         GithubClientNavHost(
             navController = navController,
@@ -42,19 +43,36 @@ fun GithubClientApp() {
 }
 
 @Composable
-fun GithubClientBottomBar(navController: NavController) {
+fun GithubClientBottomBar(navController: NavController, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    BottomAppBar(modifier = Modifier.fillMaxWidth()) {
+    BottomAppBar(modifier = modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            BottomAppBarItem(iconImageVector = Icons.Default.Search, iconDescription = "search", onClick = {navController.navigateToSearch()})
-            BottomAppBarItem(iconImageVector = Icons.Default.Favorite, iconDescription = "favorite", onClick = {navController.navigateToFavorite()})
-            BottomAppBarItem(iconImageVector = Icons.Default.AccountCircle, iconDescription = "account", onClick = {navController.navigateToAccount(context = context)})
+            BottomAppBarItem(
+                iconImageVector = Icons.Default.Search,
+                iconDescription = "search",
+                onClick = { navController.navigateToSearch() }
+            )
+            BottomAppBarItem(
+                iconImageVector = Icons.Default.Favorite,
+                iconDescription = "favorite",
+                onClick = { navController.navigateToFavorite() }
+            )
+            BottomAppBarItem(
+                iconImageVector = Icons.Default.AccountCircle,
+                iconDescription = "account",
+                onClick = { navController.navigateToAccount(context = context) }
+            )
         }
     }
 }
 
 @Composable
-fun BottomAppBarItem(modifier: Modifier = Modifier, iconImageVector: ImageVector,iconDescription: String, onClick: () -> Unit = {} ) {
+fun BottomAppBarItem(
+    iconImageVector: ImageVector,
+    iconDescription: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     Column(modifier = modifier.clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(imageVector = iconImageVector, contentDescription = iconDescription)
         Text(text = iconDescription)

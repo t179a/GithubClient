@@ -8,6 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
@@ -62,6 +63,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
     implementation("androidx.security:security-crypto:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -70,4 +73,12 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+detekt {
+    autoCorrect = true
+    parallel = true
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$../../../../detekt.yml")
 }
