@@ -34,16 +34,15 @@ import com.example.search.ui.UserImage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailScreen(
-    modifier: Modifier = Modifier,
+    viewModel: UserDetailViewModel,
     onClick: (String) -> Unit,
-    viewModel: UserDetailViewModel
+    modifier: Modifier = Modifier,
 ) {
     val uiState: UserDetailUiState by viewModel.userDetailUiState.collectAsState()
     Scaffold(modifier = modifier) { innerPadding ->
         when (uiState) {
             is UserDetailUiState.Loading -> {
-                LoadingBody(modifier.padding(innerPadding))
-
+                LoadingBody(Modifier.padding(innerPadding))
             }
             is UserDetailUiState.UiState -> {
                 UserDetailBody(
@@ -73,64 +72,45 @@ private fun LoadingBody(
 
 @Composable
 private fun UserDetailBody(
-    modifier: Modifier = Modifier,
     onClick: (String) -> Unit,
     userItem: GithubUserItem,
     followingList: List<GithubUserItem>,
     followersList: List<GithubUserItem>,
-    repositoryList: List<GithubRepositoryItem>
+    repositoryList: List<GithubRepositoryItem>,
+    modifier: Modifier = Modifier,
+
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.padding(12.dp))
         UserImage(
-            imageUrl = userItem.avatarUrl, modifier = Modifier
+            imageUrl = userItem.avatarUrl,
+            modifier = Modifier
                 .size(300.dp)
-                .align(CenterHorizontally), shape = RoundedCornerShape(30.dp)
+                .align(CenterHorizontally),
+            shape = RoundedCornerShape(30.dp)
         )
         Spacer(modifier = Modifier.padding(12.dp))
         Text(
-            text = userItem.userName, modifier = Modifier
+            text = userItem.userName,
+            modifier = Modifier
                 .align(CenterHorizontally)
-                .padding(8.dp), style = MaterialTheme.typography.headlineLarge
+                .padding(8.dp),
+            style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.padding(12.dp))
-        Row(modifier = Modifier.padding(start = 24.dp)) {
-            Text(
-                text = "follower",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-        Box(
-            modifier = Modifier
-                .height(230.dp)
-                .fillMaxWidth(), contentAlignment = Center
-        ) {
-            if (followersList.isEmpty()) {
-                EmptyCardRow(modifier = Modifier.height(230.dp), text = "no followers")
-            } else {
-                UserCardRow(users = followersList, onUserCardClick = onClick)
-            }
-        }
+        UserListRow(
+            titleName = "Following",
+            textForEmptyCase = "no following",
+            userList = followingList,
+            onClick = onClick
+        )
         Spacer(modifier = Modifier.padding(12.dp))
-        Row(modifier = Modifier.padding(start = 24.dp)) {
-            Text(
-                text = "following",
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-        Box(
-            modifier = Modifier
-                .height(230.dp)
-                .fillMaxWidth(), contentAlignment = Center
-        ) {
-            if (followingList.isEmpty()) {
-                EmptyCardRow(modifier = Modifier.height(230.dp), text = "no following")
-            } else {
-                UserCardRow(users = followingList, onUserCardClick = onClick)
-            }
-        }
+        UserListRow(
+            titleName = "Followers",
+            textForEmptyCase = "no followers",
+            userList = followersList,
+            onClick = onClick
+        )
         Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
             Text(
@@ -141,11 +121,12 @@ private fun UserDetailBody(
         }
         Box(
             modifier = Modifier
-                .height(160.dp)
-                .fillMaxWidth(), contentAlignment = Center
+                .height(230.dp)
+                .fillMaxWidth(),
+            contentAlignment = Center
         ) {
             if (repositoryList.isEmpty()) {
-                EmptyCardRow(modifier = Modifier.height(160.dp), text = "no repository")
+                EmptyCardRow(modifier = Modifier.height(230.dp), text = "no repository")
             } else {
                 RepositoryCardRow(users = repositoryList)
             }
@@ -154,3 +135,32 @@ private fun UserDetailBody(
     }
 }
 
+@Composable
+private fun UserListRow(
+    titleName: String,
+    textForEmptyCase: String,
+    userList: List<GithubUserItem>,
+    onClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Row(modifier = Modifier.padding(start = 24.dp)) {
+            Text(
+                text = titleName,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        Box(
+            modifier = Modifier
+                .height(230.dp)
+                .fillMaxWidth()
+        ) {
+            if (userList.isEmpty()) {
+                EmptyCardRow(modifier = Modifier.height(230.dp), text = textForEmptyCase)
+            } else {
+                UserCardRow(users = userList, onUserCardClick = onClick)
+            }
+        }
+    }
+}
