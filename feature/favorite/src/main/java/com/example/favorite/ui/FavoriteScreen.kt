@@ -36,22 +36,29 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.favorite.R
 
-
 @Composable
-fun FavoriteScreen(modifier: Modifier = Modifier, viewModel: FavoriteViewModel = hiltViewModel()){
+fun FavoriteScreen(modifier: Modifier = Modifier, viewModel: FavoriteViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    
-    if(uiState is FavoriteUiState.Loading) {
-        Box(modifier = modifier, contentAlignment = Alignment.Center){
+
+    if (uiState is FavoriteUiState.Loading) {
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
-    } else if(uiState is FavoriteUiState.Success){
-        Column(modifier = modifier, verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+    } else if (uiState is FavoriteUiState.Success) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = stringResource(id = R.string.favorite_title), fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.padding(12.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()){
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items((uiState as FavoriteUiState.Success).userList) { user ->
-                    GithubUserRow(userName = user.userName, userIconUrl = user.avatarUrl, onClickForDelete = { viewModel.deleteUser(user) })
+                    GithubUserRow(
+                        userName = user.userName,
+                        userIconUrl = user.avatarUrl,
+                        onClickForDelete = { viewModel.deleteUser(user) }
+                    )
                     Divider()
                 }
             }
@@ -59,17 +66,20 @@ fun FavoriteScreen(modifier: Modifier = Modifier, viewModel: FavoriteViewModel =
     }
 }
 
-
 @Composable
 private fun GithubUserRow(
-    modifier: Modifier = Modifier,
     userName: String,
     userIconUrl: String,
+    modifier: Modifier = Modifier,
     onClickForDetail: () -> Unit = {},
     onClickForDelete: () -> Unit = {},
 
 ) {
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Row(
             modifier = Modifier
                 .clickable(onClick = onClickForDetail)
