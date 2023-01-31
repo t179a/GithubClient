@@ -14,7 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun AccountScreen(
-    modifier: Modifier = Modifier, navigateToLoginScreen: () -> Unit
+    modifier: Modifier = Modifier,
+    navigateToLoginScreen: () -> Unit
 ) {
     val context = LocalContext.current
     val pref = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)

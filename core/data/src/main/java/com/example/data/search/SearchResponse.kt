@@ -3,7 +3,6 @@ package com.example.data.search
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class SearchRepositoriesResponse(
     @SerialName("items")

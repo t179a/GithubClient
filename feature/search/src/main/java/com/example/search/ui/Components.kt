@@ -46,17 +46,16 @@ import com.example.search.R
 
 @Composable
 fun EmptyCardRow(
-    modifier: Modifier = Modifier,
-    text: String
+    text: String,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth(), contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
     ) {
         Text(text = text)
     }
 }
-
 
 @Composable
 fun UserCardRow(
@@ -73,8 +72,8 @@ fun UserCardRow(
 
 @Composable
 fun RepositoryCardRow(
-    modifier: Modifier = Modifier,
-    users: List<GithubRepositoryItem>
+    users: List<GithubRepositoryItem>,
+    modifier: Modifier = Modifier
 ) {
     LazyRow(modifier = modifier, contentPadding = PaddingValues(start = 12.dp, end = 12.dp)) {
         items(users) { repositoryItem ->
@@ -82,7 +81,6 @@ fun RepositoryCardRow(
         }
     }
 }
-
 
 @Composable
 fun UserCardItem(
@@ -139,7 +137,7 @@ fun UserImage(
             model = ImageRequest.Builder(LocalContext.current).data(imageUrl).build(),
             contentDescription = "icon",
             placeholder = painterResource(id = R.drawable.ic_android_black_24dp),
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
         )
     }
@@ -203,8 +201,7 @@ fun RepositoryCard(
 
 @Preview(widthDp = 300, heightDp = 300, uiMode = UI_MODE_TYPE_NORMAL)
 @Composable
-private fun SnackImagePreview(
-) {
+private fun SnackImagePreview() {
     val sampleUserItem = GithubUserItem(
         userName = "android",
         userId = 123,

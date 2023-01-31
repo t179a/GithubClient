@@ -24,31 +24,29 @@ class SearchApi(
 
     suspend fun getFollowers(userName: String, accessToken: String = ""): PersistentList<GithubUserItem> {
         return networkService.get<List<GithubUserItem>>(
-            url = "https://api.github.com/users/${userName}/followers",
+            url = "https://api.github.com/users/$userName/followers",
             accessToken = accessToken
         ).toPersistentList()
     }
 
     suspend fun getFollowing(userName: String, accessToken: String = ""): PersistentList<GithubUserItem> {
         return networkService.get<List<GithubUserItem>>(
-            url = "https://api.github.com/users/${userName}/following",
+            url = "https://api.github.com/users/$userName/following",
             accessToken = accessToken
         ).toPersistentList()
     }
 
     suspend fun getUser(userName: String, accessToken: String = ""): GithubUserItem {
         return networkService.get<GithubUserItem>(
-            url = "https://api.github.com/users/${userName}",
+            url = "https://api.github.com/users/$userName",
             accessToken = accessToken
         )
     }
 
     suspend fun getRepositories(userName: String, accessToken: String = ""): PersistentList<GithubRepositoryItem> {
         return networkService.get<List<GithubRepositoryItem>>(
-            url = "https://api.github.com/users/${userName}/repos",
+            url = "https://api.github.com/users/$userName/repos",
             accessToken = accessToken
         ).toPersistentList()
     }
 }
-
-

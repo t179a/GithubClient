@@ -33,9 +33,15 @@ class UserDetailViewModel @Inject constructor(
         CoroutineScope(viewModelScope.coroutineContext + AndroidUiDispatcher.Main)
     val userDetailUiState: StateFlow<UserDetailUiState> =
         moleculeScope.launchMolecule(clock = RecompositionClock.ContextClock) {
-            userDetailPresenter(followingFlow = following, followersFlow = followers, userFlow = user, repositoriesFlow = repositories)
+            userDetailPresenter(
+                followingFlow = following,
+                followersFlow = followers,
+                userFlow = user,
+                repositoriesFlow = repositories
+            )
         }
-//TODO error handlingができていない点を修正
+
+// TODO error handlingができていない点を修正
     @Composable
     fun userDetailPresenter(
         followingFlow: Flow<PersistentList<GithubUserItem>>,
@@ -43,7 +49,7 @@ class UserDetailViewModel @Inject constructor(
         userFlow: Flow<GithubUserItem>,
         repositoriesFlow: Flow<PersistentList<GithubRepositoryItem>>
     ): UserDetailUiState {
-        //TODO 初期値がnullなのは多分良くないから、別の方法を考える
+        // TODO 初期値がnullなのは多分良くないから、別の方法を考える
         val followingList by followingFlow.collectAsState(initial = null)
         val followersList by followersFlow.collectAsState(initial = null)
         val user by userFlow.collectAsState(initial = null)
@@ -61,7 +67,6 @@ class UserDetailViewModel @Inject constructor(
     }
 }
 
-
 sealed interface UserDetailUiState {
     data class UiState(
         val isError: Boolean = false,
@@ -71,5 +76,5 @@ sealed interface UserDetailUiState {
         val repositoryList: List<GithubRepositoryItem> = emptyList()
     ) : UserDetailUiState
 
-    object Loading: UserDetailUiState
+    object Loading : UserDetailUiState
 }
