@@ -18,6 +18,9 @@
 - 時間があったら、[mermaid](https://mermaid.js.org/)か[PlantUML](https://plantuml.com/)で書くかも
 
 ## Dependencies
+- Linter
+    - [detekt](https://github.com/detekt/detekt)
+    - [Twitter Jetpack Compose Rules](https://twitter.github.io/compose-rules/)
 - DI
     - [dagger:hilt](https://dagger.dev/hilt/)
 - Navigation
