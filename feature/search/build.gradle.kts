@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("app.cash.molecule")
+    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
@@ -52,6 +53,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
     implementation("io.coil-kt:coil-compose:2.2.2")
@@ -66,4 +69,12 @@ dependencies {
 
 kapt {
     correctErrorTypes =  true
+}
+
+detekt {
+    autoCorrect = true
+    parallel = true
+    buildUponDefaultConfig = true
+    allRules = false
+    config = files("$../../../../detekt.yml")
 }

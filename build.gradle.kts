@@ -8,4 +8,5 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform") version "1.7.20" apply false
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20" apply false
     id("app.cash.molecule") version "0.6.1" apply false
+    id("io.gitlab.arturbosch.detekt") version "1.22.0" apply false
 }
