@@ -11,34 +11,33 @@ import com.example.setting.ui.account.AccountScreen
 import com.example.setting.ui.login.LoginScreen
 import com.example.setting.ui.progress.ProgressScreen
 
-private const val loginNavigationRoute = "setting_route"
-private const val progressNavigationRoute = "progress_route"
-private const val accountNavigationRoute = "account_route"
-private const val uri = "org.example.android.t179a://callback"
+private const val LOGIN_NAVIGATION_ROUTE = "setting_route"
+private const val PROGRESS_NAVIGATION_ROUTE = "progress_route"
+private const val ACCOUNT_NAVIGATION_ROUTE = "account_route"
+private const val CALLBACK_URI = "org.example.android.t179a://callback"
 fun NavController.navigateToAccount(context: Context) {
     val pref = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
     val accessToken = pref.getString("accessToken", "")
-    if(accessToken!!.isEmpty()){
-        this.navigate(loginNavigationRoute)
-    }else{
-        this.navigate(accountNavigationRoute)
+    if (accessToken!!.isEmpty()) {
+        this.navigate(LOGIN_NAVIGATION_ROUTE)
+    } else {
+        this.navigate(ACCOUNT_NAVIGATION_ROUTE)
     }
-
 }
 
 fun NavGraphBuilder.settingScreen(
     navigateToLoginScreen: () -> Unit,
     navigateToAccountScreen: () -> Unit
 ) {
-    composable(route = accountNavigationRoute)  {
+    composable(route = ACCOUNT_NAVIGATION_ROUTE) {
         AccountScreen(navigateToLoginScreen = navigateToLoginScreen)
     }
-    composable(route = loginNavigationRoute) {
+    composable(route = LOGIN_NAVIGATION_ROUTE) {
         LoginScreen(modifier = Modifier.fillMaxSize())
     }
     composable(
-        route = progressNavigationRoute,
-        deepLinks = listOf(navDeepLink { uriPattern = uri })
+        route = PROGRESS_NAVIGATION_ROUTE,
+        deepLinks = listOf(navDeepLink { uriPattern = CALLBACK_URI })
     ) {
         ProgressScreen(modifier = Modifier.fillMaxSize(), navigateToAccountScreen = navigateToAccountScreen)
     }

@@ -7,15 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.favorite.ui.FavoriteScreen
 
-
-const val favoriteNavigationRoute = "favorite_route"
+const val FAVORITE_NAVIGATION_ROUTE = "FAVORITE_ROUTE"
 fun NavController.navigateToFavorite() {
-    this.navigate(favoriteNavigationRoute)
+    this.navigate(FAVORITE_NAVIGATION_ROUTE)
 }
 
-fun NavGraphBuilder.favoriteScreen(
-) {
-    composable(route = favoriteNavigationRoute) {
+fun NavGraphBuilder.favoriteScreen() {
+    composable(route = FAVORITE_NAVIGATION_ROUTE) {
         FavoriteScreen(modifier = Modifier.fillMaxSize())
     }
 }
