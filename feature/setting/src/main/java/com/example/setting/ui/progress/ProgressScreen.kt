@@ -35,18 +35,13 @@ fun ProgressScreen(
         viewModel.getAccessToken(callbackCode!!)
     }
 
-    if (uiState.accessToken.isEmpty()) {
+    if (uiState.loginDate.isEmpty()) {
         Box(modifier = modifier, contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
         if (receivedState == submittedState) {
-            LaunchedEffect(key1 = uiState.accessToken) {
-                activity.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
-                    ?.edit()?.apply {
-                        putString("accessToken", uiState.accessToken)
-                        apply()
-                    }
+            LaunchedEffect(key1 = uiState.loginDate) {
                 navigateToAccountScreen()
             }
         }

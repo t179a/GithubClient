@@ -48,6 +48,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
     detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+    implementation("androidx.security:security-crypto:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.4")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")

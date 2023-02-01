@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.githubclient"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -54,6 +54,8 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:favorite"))
+    implementation(project(":core:data"))
+
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.activity:activity-compose:1.6.1")
