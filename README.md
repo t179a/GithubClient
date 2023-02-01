@@ -3,10 +3,6 @@
 ## メモ
 - github secret
     - 使い方を調べる
-- accessTokenを平文で保存しているのは良くない　　　
-    - EncryptedSharedPreferencesを使う
-- SharedPreferencesの場合context経由でgetできるが
-    - EncrypedSharedPreferencesを複数のmoduleで使う方法を考える
 - accessTokenの有効期限に対応
 - 全般的にエラーハンドリングしていない点を修正
    
