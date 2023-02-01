@@ -17,22 +17,20 @@ import androidx.core.content.ContextCompat
 import com.example.setting.BuildConfig
 import java.util.UUID
 
-private const val AUTHURL = "https://github.com/login/oauth/authorize"
-private const val REDIRECTURL = "org.example.android.t179a://callback"
+private const val AUTH_URL = "https://github.com/login/oauth/authorize"
+private const val REDIRECT_URL = "org.example.android.t179a://callback"
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        val oAuthState: String = UUID.randomUUID().toString()
-        context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).edit().apply {
-            putString("oAuthState", oAuthState)
-            apply()
-        }
+        val oAuthState: String = createOauthState()
+        saveToSharedPreference(context, "oAuthState", oAuthState)
         val uri =
-            Uri.parse(AUTHURL).buildUpon().appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
-                .appendQueryParameter("redirect_uri", REDIRECTURL).appendQueryParameter("state", oAuthState).build()
+            Uri.parse(AUTH_URL).buildUpon().appendQueryParameter("client_id", BuildConfig.CLIENT_ID)
+                .appendQueryParameter("redirect_uri", REDIRECT_URL)
+                .appendQueryParameter("state", oAuthState).build()
         val loginIntent = Intent(Intent.ACTION_VIEW, uri)
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -46,5 +44,16 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 Text(text = "Login")
             }
         }
+    }
+}
+
+private fun createOauthState(): String {
+    return UUID.randomUUID().toString()
+}
+
+private fun saveToSharedPreference(context: Context, keyName: String, value: String) {
+    context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE).edit().apply {
+        putString(keyName, value)
+        apply()
     }
 }

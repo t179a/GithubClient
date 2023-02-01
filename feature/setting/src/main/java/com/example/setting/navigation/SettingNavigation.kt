@@ -1,6 +1,6 @@
 package com.example.setting.navigation
 
-import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -15,9 +15,8 @@ private const val LOGIN_NAVIGATION_ROUTE = "setting_route"
 private const val PROGRESS_NAVIGATION_ROUTE = "progress_route"
 private const val ACCOUNT_NAVIGATION_ROUTE = "account_route"
 private const val CALLBACK_URI = "org.example.android.t179a://callback"
-fun NavController.navigateToAccount(context: Context) {
-    val pref = context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
-    val accessToken = pref.getString("accessToken", "")
+fun NavController.navigateToAccount(encryptedPref: SharedPreferences) {
+    val accessToken = encryptedPref.getString("access_token", "")
     if (accessToken!!.isEmpty()) {
         this.navigate(LOGIN_NAVIGATION_ROUTE)
     } else {

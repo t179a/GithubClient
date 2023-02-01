@@ -1,5 +1,6 @@
 package com.example.githubclient.ui
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.favorite.navigation.navigateToFavorite
@@ -29,13 +29,14 @@ import com.example.setting.navigation.navigateToAccount
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GithubClientApp(modifier: Modifier = Modifier) {
+fun GithubClientApp(encryptedPref: SharedPreferences, modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     Scaffold(
         modifier = modifier,
-        bottomBar = { GithubClientBottomBar(navController = navController) }
+        bottomBar = { GithubClientBottomBar(encryptedPref, navController = navController) }
     ) { innerPadding ->
         GithubClientNavHost(
+            encryptedPref = encryptedPref,
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )
@@ -43,8 +44,11 @@ fun GithubClientApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun GithubClientBottomBar(navController: NavController, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
+fun GithubClientBottomBar(
+    encryptedPref: SharedPreferences,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
     BottomAppBar(modifier = modifier.fillMaxWidth()) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
             BottomAppBarItem(
@@ -60,7 +64,7 @@ fun GithubClientBottomBar(navController: NavController, modifier: Modifier = Mod
             BottomAppBarItem(
                 iconImageVector = Icons.Default.AccountCircle,
                 iconDescription = "account",
-                onClick = { navController.navigateToAccount(context = context) }
+                onClick = { navController.navigateToAccount(encryptedPref = encryptedPref) }
             )
         }
     }
@@ -73,7 +77,10 @@ fun BottomAppBarItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
-    Column(modifier = modifier.clickable(onClick = onClick), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier.clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Icon(imageVector = iconImageVector, contentDescription = iconDescription)
         Text(text = iconDescription)
     }

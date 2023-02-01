@@ -1,6 +1,5 @@
 package com.example.search.ui.search
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +41,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -74,7 +72,7 @@ fun SearchRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    onSearch: (String, String) -> Unit,
+    onSearch: (String) -> Unit,
     onWordChange: (String) -> Unit,
     onClickForDetail: (String) -> Unit,
     onClickForSave: (GithubUserItem) -> Unit,
@@ -106,7 +104,7 @@ fun SearchScreen(
 
 @Composable
 private fun SearchTextFieldAppBar(
-    onSearch: (String, String) -> Unit,
+    onSearch: (String) -> Unit,
     onWordChange: (String) -> Unit,
     searchWord: String,
     modifier: Modifier = Modifier,
@@ -123,14 +121,13 @@ private fun SearchTextFieldAppBar(
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
-    onSearch: (String, String) -> Unit,
+    onSearch: (String) -> Unit,
     word: String,
     onWordChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -155,10 +152,7 @@ private fun SearchTextField(
             }
         },
         keyboardActions = KeyboardActions(onDone = {
-            val accessToken =
-                context.getSharedPreferences("com.example.githubclient", Context.MODE_PRIVATE)
-                    .getString("accessToken", "")
-            onSearch(word, accessToken!!)
+            onSearch(word)
             keyboardController?.hide()
         }),
         singleLine = true,
@@ -261,7 +255,7 @@ val fakeRepositoryList =
         )
     }
 
-private val previewFun = { _: String, _: String -> }
+private val previewFun = { _: String -> }
 
 @Preview
 @Composable

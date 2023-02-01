@@ -1,5 +1,7 @@
 package com.example.search.ui.search
 
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.search.GithubUserItem
@@ -15,19 +17,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchRepository: SearchRepository
+    private val searchRepository: SearchRepository,
+    private val encryptedSharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _searchUiState: MutableStateFlow<SearchUiState> =
         MutableStateFlow(SearchUiState())
 
     val searchUiState: StateFlow<SearchUiState> = _searchUiState
 
-    fun onSearchUsers(word: String, accessToken: String) {
+    fun onSearchUsers(word: String) {
         viewModelScope.launch {
             _searchUiState.update {
                 it.copy(isLoading = true)
             }
-            searchRepository.searchUsers(word = word, accessToken = accessToken).catch {
+            val accessToken = encryptedSharedPreferences.getString("access_token", "")
+            Log.d("hoge", accessToken.toString())
+            searchRepository.searchUsers(word = word, accessToken = accessToken!!).catch {
                 _searchUiState.update {
                     it.copy(isLoading = false, isError = true)
                 }

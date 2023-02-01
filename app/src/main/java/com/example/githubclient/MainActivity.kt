@@ -1,5 +1,6 @@
 package com.example.githubclient
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +11,11 @@ import androidx.compose.ui.Modifier
 import com.example.githubclient.ui.GithubClientApp
 import com.example.githubclient.ui.theme.GithubClientTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var encryptedPref: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GithubClientApp()
+                    GithubClientApp(encryptedPref)
                 }
             }
         }

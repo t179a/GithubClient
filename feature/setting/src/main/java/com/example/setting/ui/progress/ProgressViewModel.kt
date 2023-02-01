@@ -1,5 +1,6 @@
 package com.example.setting.ui.progress
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.auth.AuthRepository
@@ -8,10 +9,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class ProgressViewModel @Inject constructor(private val authRepository: AuthRepository) :
+class ProgressViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val encryptedPref: SharedPreferences
+) :
     ViewModel() {
     private val _uiState = MutableStateFlow(AccountUiState())
     val uiState = _uiState
@@ -22,12 +27,15 @@ class ProgressViewModel @Inject constructor(private val authRepository: AuthRepo
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code
             ).collect { authResponse ->
-                _uiState.update { it.copy(accessToken = authResponse.accessToken) }
+                _uiState.update { it.copy(loginDate = LocalDateTime.now().toString()) }
+                encryptedPref.edit().apply {
+                    putString("access_token", authResponse.accessToken)
+                }.apply()
             }
         }
     }
 }
 
 data class AccountUiState(
-    val accessToken: String = ""
+    val loginDate: String = ""
 )
