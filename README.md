@@ -1,14 +1,5 @@
 # GithubClient
 
-## メモ
-- github secret
-    - 使い方を調べる
-- 全般的にエラーハンドリングしていない点を修正
-   
-
-
-
-
 ## UML
 - 時間があったら、[mermaid](https://mermaid.js.org/)か[PlantUML](https://plantuml.com/)で書くかも
 
