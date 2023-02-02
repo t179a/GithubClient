@@ -8,14 +8,18 @@ plugins {
 
 android {
     namespace = "com.example.database"
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
-        minSdk = 23
-        targetSdk = 32
+        minSdk = 33
+        targetSdk = 33
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        defaultConfig {
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
+
     }
 
     buildTypes {
@@ -47,8 +51,11 @@ dependencies {
     detektPlugins("com.twitter.compose.rules:detekt:0.0.26")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+
 }
 kapt {
     correctErrorTypes = true
