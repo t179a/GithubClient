@@ -34,7 +34,13 @@ fun GithubClientApp(encryptedPref: SharedPreferences, modifier: Modifier = Modif
     val navController = rememberNavController()
     Scaffold(
         modifier = modifier,
-        bottomBar = { GithubClientBottomBar(encryptedPref, navController = navController, modifier = Modifier.testTag("BottomBar")) }
+        bottomBar = {
+            GithubClientBottomBar(
+                encryptedPref,
+                navController = navController,
+                modifier = Modifier.testTag("BottomBar")
+            )
+        }
     ) { innerPadding ->
         GithubClientNavHost(
             encryptedPref = encryptedPref,
