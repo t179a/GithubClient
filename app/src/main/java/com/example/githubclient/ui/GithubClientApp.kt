@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.favorite.navigation.navigateToFavorite
@@ -33,7 +34,7 @@ fun GithubClientApp(encryptedPref: SharedPreferences, modifier: Modifier = Modif
     val navController = rememberNavController()
     Scaffold(
         modifier = modifier,
-        bottomBar = { GithubClientBottomBar(encryptedPref, navController = navController) }
+        bottomBar = { GithubClientBottomBar(encryptedPref, navController = navController, modifier = Modifier.testTag("BottomBar")) }
     ) { innerPadding ->
         GithubClientNavHost(
             encryptedPref = encryptedPref,
