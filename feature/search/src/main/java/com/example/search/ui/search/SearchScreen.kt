@@ -112,11 +112,13 @@ private fun SearchTextFieldAppBar(
     modifier: Modifier = Modifier,
 ) {
     SearchTextField(
-        onSearch = onSearch, word = searchWord, onWordChange = onWordChange, modifier = modifier
+        onSearch = onSearch,
+        word = searchWord,
+        onWordChange = onWordChange,
+        modifier = modifier
     )
 }
 
-// TODO keyboardが自動で開かない点を修正
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
@@ -165,10 +167,12 @@ private fun SearchedResultListField(
 ) {
     LazyColumn(modifier = modifier) {
         items(items = userList, key = { userItem -> userItem.userId }) {
-            GithubUserRow(userName = it.userName,
+            GithubUserRow(
+                userName = it.userName,
                 userIconUrl = it.avatarUrl,
                 onClickForDetail = { onClickForDetail(it.userName) },
-                onClickForSave = { onClickForSave(it) })
+                onClickForSave = { onClickForSave(it) }
+            )
             Divider()
         }
     }
@@ -229,7 +233,8 @@ private fun LoadingBody(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(modifier = Modifier.testTag("circular_progress_indicator"))
     }
@@ -238,12 +243,15 @@ private fun LoadingBody(
 @Preview
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen(onSearch = {},
+    SearchScreen(
+        onSearch = {},
         onWordChange = {},
         onClickForDetail = {},
         onClickForSave = {},
         uiState = SearchUiState(
-            isLoading = false, isError = false, userList = githubUserItemTestData
+            isLoading = false,
+            isError = false,
+            userList = githubUserItemTestData
         )
     )
 }
@@ -251,11 +259,12 @@ private fun SearchScreenPreview() {
 @Preview
 @Composable
 private fun GithubRepositoryRowPreview() {
-    GithubUserRow(userName = "",
+    GithubUserRow(
+        userName = "",
         modifier = Modifier.fillMaxWidth(),
         onClickForDetail = {},
         onClickForSave = {},
-        userIconUrl = "https://avatars.githubusercontent.com/u/1024025?v=4"
+        userIconUrl = githubUserItemTestData[0].avatarUrl
     )
 }
 
