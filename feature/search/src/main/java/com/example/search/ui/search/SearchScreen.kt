@@ -42,6 +42,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.data.search.GithubUserItem
 import com.example.search.R
+import com.example.testing.data.githubUserItemTestData
 
 @Composable
 fun SearchRoute(
@@ -117,7 +119,6 @@ private fun SearchTextFieldAppBar(
     )
 }
 
-// TODO keyboardが自動で開かない点を修正
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTextField(
@@ -135,16 +136,14 @@ private fun SearchTextField(
     TextField(
         value = word,
         onValueChange = onWordChange,
-        modifier = modifier
+        modifier = modifier.testTag("text_field")
             .background(color = MaterialTheme.colorScheme.surfaceVariant)
             .focusRequester(focusRequester = focusRequester)
             .fillMaxWidth()
             .height(60.dp),
         placeholder = { Text(text = "検索する") },
         trailingIcon = {
-            IconButton(
-                onClick = { onWordChange("") }
-            ) {
+            IconButton(onClick = { onWordChange("") }) {
                 Icon(
                     painter = rememberVectorPainter(image = Icons.Default.Clear),
                     contentDescription = "clear word",
@@ -189,7 +188,7 @@ private fun GithubUserRow(
 
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.testTag("github_user_row").fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -214,8 +213,7 @@ private fun GithubUserRow(
                 text = userName,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Left,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
         Image(
@@ -238,37 +236,22 @@ private fun LoadingBody(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator(modifier = Modifier)
+        CircularProgressIndicator(modifier = Modifier.testTag("circular_progress_indicator"))
     }
 }
-
-val fakeRepositoryList =
-    List(20) {
-        GithubUserItem(
-            userName = "android",
-            userId = it.toLong(),
-            userUrl = "https://api.github.com/users/torvalds",
-            avatarUrl = "https://avatars.githubusercontent.com/u/1024025?v=4",
-            followersUrl = "https://api.github.com/users/torvalds/followers",
-            followingUrl = "https://api.github.com/users/torvalds/following{/other_user}",
-            repositoryUrl = "https://api.github.com/users/torvalds/repos",
-        )
-    }
-
-private val previewFun = { _: String -> }
 
 @Preview
 @Composable
 private fun SearchScreenPreview() {
     SearchScreen(
-        onSearch = previewFun,
+        onSearch = {},
         onWordChange = {},
         onClickForDetail = {},
         onClickForSave = {},
         uiState = SearchUiState(
             isLoading = false,
             isError = false,
-            userList = fakeRepositoryList
+            userList = githubUserItemTestData
         )
     )
 }
@@ -281,12 +264,12 @@ private fun GithubRepositoryRowPreview() {
         modifier = Modifier.fillMaxWidth(),
         onClickForDetail = {},
         onClickForSave = {},
-        userIconUrl = "https://avatars.githubusercontent.com/u/1024025?v=4"
+        userIconUrl = githubUserItemTestData[0].avatarUrl
     )
 }
 
 @Preview
 @Composable
 private fun SearchTextFieldPreview() {
-    SearchTextField(onSearch = previewFun, word = "", onWordChange = {}, modifier = Modifier)
+    SearchTextField(onSearch = {}, word = "", onWordChange = {}, modifier = Modifier)
 }

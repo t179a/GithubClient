@@ -15,7 +15,7 @@ android {
         minSdk = 33
         targetSdk = 33
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner  = "com.example.testing.GithubClientTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:database"))
+    implementation(project(":core:testing"))
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.compose.ui:ui:1.3.2")
     implementation("androidx.compose.ui:ui-tooling-preview:1.3.2")

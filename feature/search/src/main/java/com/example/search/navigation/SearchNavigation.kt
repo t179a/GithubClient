@@ -7,7 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.search.ui.detail.UserDetailScreen
+import com.example.search.ui.detail.UserDetailRoute
 import com.example.search.ui.search.SearchRoute
 
 const val SEARCH_NAVIGATION_ROUTE = "search_route"
@@ -35,7 +35,7 @@ fun NavGraphBuilder.searchScreen(
             }
         )
     ) {
-        UserDetailScreen(
+        UserDetailRoute(
             modifier = Modifier,
             onClick = onUserCardClick,
             viewModel = hiltViewModel()
