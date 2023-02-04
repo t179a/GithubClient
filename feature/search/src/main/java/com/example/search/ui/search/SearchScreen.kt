@@ -134,7 +134,7 @@ private fun SearchTextField(
     TextField(
         value = word,
         onValueChange = onWordChange,
-        modifier = modifier
+        modifier = modifier.testTag("text_field")
             .background(color = MaterialTheme.colorScheme.surfaceVariant)
             .focusRequester(focusRequester = focusRequester)
             .fillMaxWidth()
@@ -184,7 +184,7 @@ private fun GithubUserRow(
 
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.testTag("github_user_row").fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
