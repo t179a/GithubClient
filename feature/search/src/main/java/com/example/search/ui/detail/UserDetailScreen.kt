@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
@@ -30,15 +31,26 @@ import com.example.search.ui.EmptyCardRow
 import com.example.search.ui.RepositoryCardRow
 import com.example.search.ui.UserCardRow
 import com.example.search.ui.UserImage
+import com.example.testing.data.githubRepositoryItemTestData
+import com.example.testing.data.githubUserItemTestData
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailScreen(
+fun UserDetailRoute(
     viewModel: UserDetailViewModel,
     onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uiState: UserDetailUiState by viewModel.userDetailUiState.collectAsState()
+    val uiState by viewModel.userDetailUiState.collectAsState()
+    UserDetailScreen(uiState = uiState, onClick = onClick, modifier = modifier)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserDetailScreen(
+    uiState: UserDetailUiState,
+    onClick: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(modifier = modifier) { innerPadding ->
         when (uiState) {
             is UserDetailUiState.Loading -> {
@@ -48,10 +60,10 @@ fun UserDetailScreen(
                 UserDetailBody(
                     modifier = Modifier.padding(innerPadding),
                     onClick = onClick,
-                    userItem = (uiState as UserDetailUiState.UiState).userItem,
-                    followingList = (uiState as UserDetailUiState.UiState).followingList,
-                    followersList = (uiState as UserDetailUiState.UiState).followersList,
-                    repositoryList = (uiState as UserDetailUiState.UiState).repositoryList
+                    userItem = uiState.userItem,
+                    followingList = uiState.followingList,
+                    followersList = uiState.followersList,
+                    repositoryList = uiState.repositoryList
                 )
             }
         }
@@ -82,22 +94,7 @@ private fun UserDetailBody(
 ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.padding(12.dp))
-        UserImage(
-            imageUrl = userItem.avatarUrl,
-            modifier = Modifier
-                .size(300.dp)
-                .align(CenterHorizontally),
-            shape = RoundedCornerShape(30.dp)
-        )
-        Spacer(modifier = Modifier.padding(12.dp))
-        Text(
-            text = userItem.userName,
-            modifier = Modifier
-                .align(CenterHorizontally)
-                .padding(8.dp),
-            style = MaterialTheme.typography.headlineLarge
-        )
-        Spacer(modifier = Modifier.padding(12.dp))
+        UserImageAndName(userItem = userItem)
         UserListRow(
             titleName = "Following",
             textForEmptyCase = "no following",
@@ -163,4 +160,56 @@ private fun UserListRow(
             }
         }
     }
+}
+
+@Composable
+private fun UserImageAndName(userItem: GithubUserItem, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        UserImage(
+            imageUrl = userItem.avatarUrl,
+            modifier = Modifier
+                .size(300.dp)
+                .align(CenterHorizontally),
+            shape = RoundedCornerShape(30.dp)
+        )
+        Spacer(modifier = Modifier.padding(12.dp))
+        Text(
+            text = userItem.userName,
+            modifier = Modifier
+                .align(CenterHorizontally)
+                .padding(8.dp),
+            style = MaterialTheme.typography.headlineLarge
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun UserImageAndNamePreview() {
+    UserImageAndName(userItem = githubUserItemTestData[0])
+}
+
+@Preview
+@Composable
+private fun UserDetailScreenPreview() {
+    UserDetailScreen(
+        uiState = UserDetailUiState.UiState(
+            userItem = githubUserItemTestData[0],
+            followersList = githubUserItemTestData,
+            followingList = githubUserItemTestData,
+            repositoryList = githubRepositoryItemTestData
+        ),
+        onClick = {}
+    )
+}
+
+@Preview
+@Composable
+private fun UserListRowPreview() {
+    UserListRow(
+        titleName = "follower",
+        textForEmptyCase = "no following",
+        userList = githubUserItemTestData,
+        onClick = {}
+    )
 }
