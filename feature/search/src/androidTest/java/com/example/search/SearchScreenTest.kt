@@ -27,20 +27,19 @@ class SearchScreenTest {
         composeTestRule.onNodeWithTag("circular_progress_indicator").assertIsDisplayed()
     }
 
-    //TODO AsyncImageがある時のテストの書き方を調べる
-//    @Test
-//    fun githubUserRow_whenUiStateIsSuccess_displayed() {
-//        composeTestRule.setContent {
-//            SearchScreen(
-//                onSearch = {},
-//                onWordChange = {},
-//                onClickForDetail = {},
-//                onClickForSave = {},
-//                uiState = SearchUiState(userList = githubUserItemTestData)
-//            )
-//        }
-//        composeTestRule.onNodeWithTag("github_user_row").assertIsDisplayed()
-//    }
+    @Test
+    fun githubUserRow_whenUiStateIsSuccess_displayed() {
+        composeTestRule.setContent {
+            SearchScreen(
+                onSearch = {},
+                onWordChange = {},
+                onClickForDetail = {},
+                onClickForSave = {},
+                uiState = SearchUiState(userList = githubUserItemTestData.take(1))
+            )
+        }
+        composeTestRule.onNodeWithTag("github_user_row").assertIsDisplayed()
+    }
 
     @Test
     fun textField_is_displayed(){
