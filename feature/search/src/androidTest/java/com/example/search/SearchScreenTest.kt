@@ -42,7 +42,7 @@ class SearchScreenTest {
     }
 
     @Test
-    fun textField_is_displayed(){
+    fun textField_is_displayed() {
         composeTestRule.setContent {
             SearchScreen(
                 onSearch = {},
