@@ -52,6 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.data.search.GithubUserItem
 import com.example.search.R
+import com.example.testing.data.githubUserItemTestData
 
 @Composable
 fun SearchRoute(
@@ -111,10 +112,7 @@ private fun SearchTextFieldAppBar(
     modifier: Modifier = Modifier,
 ) {
     SearchTextField(
-        onSearch = onSearch,
-        word = searchWord,
-        onWordChange = onWordChange,
-        modifier = modifier
+        onSearch = onSearch, word = searchWord, onWordChange = onWordChange, modifier = modifier
     )
 }
 
@@ -143,9 +141,7 @@ private fun SearchTextField(
             .height(60.dp),
         placeholder = { Text(text = "検索する") },
         trailingIcon = {
-            IconButton(
-                onClick = { onWordChange("") }
-            ) {
+            IconButton(onClick = { onWordChange("") }) {
                 Icon(
                     painter = rememberVectorPainter(image = Icons.Default.Clear),
                     contentDescription = "clear word",
@@ -169,12 +165,10 @@ private fun SearchedResultListField(
 ) {
     LazyColumn(modifier = modifier) {
         items(items = userList, key = { userItem -> userItem.userId }) {
-            GithubUserRow(
-                userName = it.userName,
+            GithubUserRow(userName = it.userName,
                 userIconUrl = it.avatarUrl,
                 onClickForDetail = { onClickForDetail(it.userName) },
-                onClickForSave = { onClickForSave(it) }
-            )
+                onClickForSave = { onClickForSave(it) })
             Divider()
         }
     }
@@ -215,8 +209,7 @@ private fun GithubUserRow(
                 text = userName,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Left,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
         Image(
@@ -236,40 +229,21 @@ private fun LoadingBody(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(modifier = Modifier.testTag("circular_progress_indicator"))
     }
 }
 
-val fakeRepositoryList =
-    List(20) {
-        GithubUserItem(
-            userName = "android",
-            userId = it.toLong(),
-            userUrl = "https://api.github.com/users/torvalds",
-            avatarUrl = "https://avatars.githubusercontent.com/u/1024025?v=4",
-            followersUrl = "https://api.github.com/users/torvalds/followers",
-            followingUrl = "https://api.github.com/users/torvalds/following{/other_user}",
-            repositoryUrl = "https://api.github.com/users/torvalds/repos",
-        )
-    }
-
-private val previewFun = { _: String -> }
-
 @Preview
 @Composable
 private fun SearchScreenPreview() {
-    SearchScreen(
-        onSearch = previewFun,
+    SearchScreen(onSearch = {},
         onWordChange = {},
         onClickForDetail = {},
         onClickForSave = {},
         uiState = SearchUiState(
-            isLoading = false,
-            isError = false,
-            userList = fakeRepositoryList
+            isLoading = false, isError = false, userList = githubUserItemTestData
         )
     )
 }
@@ -277,8 +251,7 @@ private fun SearchScreenPreview() {
 @Preview
 @Composable
 private fun GithubRepositoryRowPreview() {
-    GithubUserRow(
-        userName = "",
+    GithubUserRow(userName = "",
         modifier = Modifier.fillMaxWidth(),
         onClickForDetail = {},
         onClickForSave = {},
@@ -289,5 +262,5 @@ private fun GithubRepositoryRowPreview() {
 @Preview
 @Composable
 private fun SearchTextFieldPreview() {
-    SearchTextField(onSearch = previewFun, word = "", onWordChange = {}, modifier = Modifier)
+    SearchTextField(onSearch = {}, word = "", onWordChange = {}, modifier = Modifier)
 }
