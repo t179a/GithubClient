@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.data.search.GithubRepositoryItem
@@ -75,7 +76,9 @@ private fun LoadingBody(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .testTag("circular_progress_indicator")
+            .fillMaxSize(),
         contentAlignment = Center
     ) {
         CircularProgressIndicator(modifier = Modifier)
@@ -91,7 +94,7 @@ private fun UserDetailBody(
     repositoryList: List<GithubRepositoryItem>,
     modifier: Modifier = Modifier,
 
-) {
+    ) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.padding(12.dp))
         UserImageAndName(userItem = userItem)
@@ -99,14 +102,16 @@ private fun UserDetailBody(
             titleName = "Following",
             textForEmptyCase = "no following",
             userList = followingList,
-            onClick = onClick
+            onClick = onClick,
+            modifier = Modifier.testTag("following_list_row")
         )
         Spacer(modifier = Modifier.padding(12.dp))
         UserListRow(
             titleName = "Followers",
             textForEmptyCase = "no followers",
             userList = followersList,
-            onClick = onClick
+            onClick = onClick,
+            modifier = Modifier.testTag("followers_list_row")
         )
         Spacer(modifier = Modifier.padding(12.dp))
         Row(modifier = Modifier.padding(start = 24.dp)) {
@@ -125,7 +130,10 @@ private fun UserDetailBody(
             if (repositoryList.isEmpty()) {
                 EmptyCardRow(modifier = Modifier.height(230.dp), text = "no repository")
             } else {
-                RepositoryCardRow(users = repositoryList)
+                RepositoryCardRow(
+                    users = repositoryList,
+                    modifier = Modifier.testTag("repository_card_row")
+                )
             }
         }
         Spacer(modifier = Modifier.padding(12.dp))
@@ -168,6 +176,7 @@ private fun UserImageAndName(userItem: GithubUserItem, modifier: Modifier = Modi
         UserImage(
             imageUrl = userItem.avatarUrl,
             modifier = Modifier
+                .testTag("user_image")
                 .size(300.dp)
                 .align(CenterHorizontally),
             shape = RoundedCornerShape(30.dp)
@@ -176,6 +185,7 @@ private fun UserImageAndName(userItem: GithubUserItem, modifier: Modifier = Modi
         Text(
             text = userItem.userName,
             modifier = Modifier
+                .testTag("user_name")
                 .align(CenterHorizontally)
                 .padding(8.dp),
             style = MaterialTheme.typography.headlineLarge
