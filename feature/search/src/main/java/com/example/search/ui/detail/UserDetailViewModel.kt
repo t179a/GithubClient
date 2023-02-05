@@ -11,7 +11,7 @@ import app.cash.molecule.RecompositionClock
 import app.cash.molecule.launchMolecule
 import com.example.data.search.GithubRepositoryItem
 import com.example.data.search.GithubUserItem
-import com.example.data.search.UserDetailRepository
+import com.example.data.search.repository.UserDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
