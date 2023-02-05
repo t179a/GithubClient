@@ -1,11 +1,10 @@
 package com.example.search.ui.search
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.search.GithubUserItem
-import com.example.data.search.SearchRepository
+import com.example.data.search.repository.SearchRepository
 import com.example.database.model.GithubUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,6 @@ class SearchViewModel @Inject constructor(
                 it.copy(isLoading = true)
             }
             val accessToken = encryptedSharedPreferences.getString("access_token", "")
-            Log.d("hoge", accessToken.toString())
             searchRepository.searchUsers(word = word, accessToken = accessToken!!).catch {
                 _searchUiState.update {
                     it.copy(isLoading = false, isError = true)
