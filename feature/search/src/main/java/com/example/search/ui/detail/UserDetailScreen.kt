@@ -94,7 +94,7 @@ private fun UserDetailBody(
     repositoryList: List<GithubRepositoryItem>,
     modifier: Modifier = Modifier,
 
-    ) {
+) {
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Spacer(modifier = Modifier.padding(12.dp))
         UserImageAndName(userItem = userItem)
