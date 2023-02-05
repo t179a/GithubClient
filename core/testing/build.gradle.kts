@@ -36,8 +36,10 @@ android {
 
 dependencies {
     implementation(project(":core:data"))
+    implementation(project(":core:database"))
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.test:runner:1.5.2")
     testImplementation("junit:junit:4.13.2")
@@ -45,6 +47,7 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.44")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
     implementation("com.google.dagger:hilt-android-testing:2.44")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
