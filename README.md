@@ -1,7 +1,7 @@
 # GithubClient
 
 ## UML
-<img src="https://user-images.githubusercontent.com/67852630/217276880-0cd52e57-1fa5-4eaa-9317-77f833a2b039.png" width=80%>
+<img src="https://user-images.githubusercontent.com/67852630/217280978-51968938-bd2a-4c33-97e4-87e5358e1d2c.png" width=100%>
 
 ## Teck Stack
 - [Modularization](https://developer.android.com/topic/modularization)
@@ -31,4 +31,3 @@
 - UML
     - [Mermaid.js](https://mermaid.js.org/)
     
-
