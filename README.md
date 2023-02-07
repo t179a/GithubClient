@@ -1,9 +1,10 @@
 # GithubClient
 
 ## UML
-- 時間があったら、[mermaid](https://mermaid.js.org/)か[PlantUML](https://plantuml.com/)で書くかも
+<img src="https://user-images.githubusercontent.com/67852630/217276880-0cd52e57-1fa5-4eaa-9317-77f833a2b039.png" width=80%>
 
-## Dependencies
+## Teck Stack
+- [Modularization](https://developer.android.com/topic/modularization)
 - Linter
     - [detekt](https://github.com/detekt/detekt)
     - [Twitter Jetpack Compose Rules](https://twitter.github.io/compose-rules/)
@@ -22,3 +23,12 @@
     - [Molecule](https://github.com/cashapp/molecule)
 - Data-Storage
     - [Room](https://developer.android.com/training/data-storage/room)
+- Test
+    - [hilt-android-testing](https://developer.android.com/training/dependency-injection/hilt-testing)
+    - [androidx.compose.ui:ui-test-junit4](https://androidx.tech/artifacts/compose.ui/ui-test-junit4/)
+    - [org.jetbrains.kotlinx:kotlinx-coroutines-test](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+    - [org.mockito.kotlin:mockito-kotlin](https://site.mockito.org/)
+- UML
+    - [Mermaid.js](https://mermaid.js.org/)
+    
+
