@@ -1,9 +1,14 @@
 # GithubClient
 
+## Screenshots
+| Search | Favorite | Account |
+| :---: | :---: | :---: |
+| <img src="https://user-images.githubusercontent.com/67852630/217313080-8ffac1b3-fc92-4bc7-847b-97c9a261cf87.png" width=100%> | <img src="https://user-images.githubusercontent.com/67852630/217313984-811b316e-9c9a-4c61-af7f-adc6ec384c5f.png" width=100%> | <img src="https://user-images.githubusercontent.com/67852630/217314384-e479aa2e-3c24-46a0-81c7-02d9b89fe83b.png" width=100%> |
+
 ## UML
 <img src="https://user-images.githubusercontent.com/67852630/217280978-51968938-bd2a-4c33-97e4-87e5358e1d2c.png" width=100%>
 
-## Teck Stack
+## Tech Stack
 - [Modularization](https://developer.android.com/topic/modularization)
 - Linter
     - [detekt](https://github.com/detekt/detekt)
