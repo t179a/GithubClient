@@ -30,6 +30,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Set up Local Properties
+        env:
+          APOD_API_KEY: $
+          run: echo CLIENT_ID=\"$CLIENT_ID\"\nCLIENT_SECRET=\"$CLIENT_SECRET\" > ./local.properties
+
       - name: Build Debug Apk
         run: ./gradlew assembleDebug
 
