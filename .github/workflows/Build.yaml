@@ -32,10 +32,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Set up Local Properties
+        env: 
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+          CLIENT_ID: ${{secrets.CLIENT_ID}}
         run: |
           cat << EOF > ./local.properties 
-          CLIENT_ID=\"secrets.CLIENT_ID\"
-          CLIENT_SECRET=\"secrets.CLIENT_SECRET\"
+          CLIENT_ID=\"$CLIENT_SECRET\"
+          CLIENT_SECRET=\"$CLIENT_ID\"
           EOF
 
       - name: Build Debug Apk
