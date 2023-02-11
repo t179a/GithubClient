@@ -64,6 +64,10 @@ jobs:
     needs: build
     runs-on: macOS-latest
     timeout-minutes: 55
+    strategy:
+      matrix:
+        api-level: [32, 33]
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
