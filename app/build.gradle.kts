@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -23,9 +25,27 @@ android {
             useSupportLibrary = true
         }
     }
+    signingConfigs {
+        create("release_singing_config") {
+            if(System.getenv("KEYSTORE_BASE64") != null) {
+                System.getenv("KEYSTORE_BASE64").let { base64 ->
+                    val base64Decoder = Base64.getDecoder()
+                    File("keystore.jks").also { file ->
+                        file.createNewFile()
+                        file.writeBytes(base64Decoder.decode(base64))
+                    }
+                }
+                storeFile = File(rootProject.projectDir, "keystore.jks")
+                storePassword = System.getenv("STORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release_singing_config")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
