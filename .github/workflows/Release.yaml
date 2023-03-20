@@ -27,8 +27,18 @@ jobs:
       - name: Restore KeyStore
         run:
           echo "${{secrets.KEYSTORE_BASE64}}" | base64 -d > keystore.jks
+          
+      - name: Set up Local Properties
+        env: 
+          CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+          CLIENT_ID: ${{secrets.CLIENT_ID}}
+        run: |
+          cat << EOF > ./local.properties 
+          CLIENT_ID=$CLIENT_ID
+          CLIENT_SECRET=$CLIENT_SECRET
+          EOF
 
-      - name: Restore KeyStore And Build Release Apk
+      - name: Build Release Apk
         env:
           KEYSTORE_BASE64: ${{secrets.KEYSTORE_BASE64}}
           STORE_PASSWORD: ${{secrets.STORE_PASSWORD}}
