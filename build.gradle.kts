@@ -9,4 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.20" apply false
     id("app.cash.molecule") version "0.6.1" apply false
     id("io.gitlab.arturbosch.detekt") version "1.22.0" apply false
+    id("io.github.gmazzo.test.aggregation.coverage") version "1.1.0"
+    // and/or
+    id("io.github.gmazzo.test.aggregation.results") version "1.1.0"
 }
